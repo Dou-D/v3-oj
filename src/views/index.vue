@@ -4,7 +4,9 @@
             <NavBar />
         </a-layout-header>
         <a-layout>
-            <a-layout-content :style="contentStyle">Content</a-layout-content>
+            <a-layout-content :style="contentStyle">
+                <RouterView />
+            </a-layout-content>
             <a-layout-sider :style="siderStyle">Sider</a-layout-sider>
         </a-layout>
         <a-layout-footer :style="footerStyle">Footer</a-layout-footer>
@@ -12,7 +14,7 @@
 </template>
 <script setup>
 import NavBar from '@/components/Home/NavBar.vue';
-
+import { RouterView, RouterLink } from 'vue-router';
 /**
  * @headerStyle {object} - Header style
  * @contentStyle {object} - Content style
