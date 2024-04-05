@@ -1,25 +1,33 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 
-import App from './App.vue'
-import router from './router/router'
+import App from "./App.vue";
+import router from "./router/router";
 
-import PrimeVue from 'primevue/config';
+import { install as VueMonacoEditorPlugin } from "@guolao/vue-monaco-editor";
+
+import PrimeVue from "primevue/config";
 import "primevue/resources/themes/aura-light-blue/theme.css";
-import Antd from 'ant-design-vue';
-import 'ant-design-vue/dist/reset.css';
-import Button from 'primevue/button';
+import Antd from "ant-design-vue";
+import "ant-design-vue/dist/reset.css";
+import Button from "primevue/button";
+import Slider from "primevue/slider";
+const app = createApp(App);
 
-const app = createApp(App)
-app.component('Button', Button);
+app.use(VueMonacoEditorPlugin, {
+  paths: {
+    // The recommended CDN config
+    vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs",
+    // vs: "monaco-editor/min/vs"
+  },
+});
 
+app.component("Slider", Slider);
+app.component("Button", Button);
 
-
-app.use(createPinia())
-app.use(router)
-app.use(Antd)
+app.use(createPinia());
+app.use(router);
+app.use(Antd);
 app.use(PrimeVue);
 
-
-
-app.mount('#app')
+app.mount("#app");

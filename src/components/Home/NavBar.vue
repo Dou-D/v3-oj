@@ -4,54 +4,60 @@
             <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
         </a-col>
         <a-col flex="0 1 300px">
-            <RouterLink to="/login">
-                <a-avatar style="background-color: #87d068">
-                    <UserOutlined />
-                </a-avatar>
-                <span>dou</span>
-            </RouterLink>
+            <a-avatar style="background-color: #87d068">
+                <UserOutlined />
+            </a-avatar>
+            <a-dropdown-button @click="handleButtonClick">
+                dou
+                <template #overlay>
+                    <a-menu @click="handleMenuClick">
+                        <a-menu-item v-for="item in menu" :key="item.id" @click="navigate(item.path)" >
+                            {{ item.title }}
+                        </a-menu-item>
+                    </a-menu>
+                </template>
+            </a-dropdown-button>
         </a-col>
     </a-row>
 </template>
 
 <script setup>
+import { UserOutlined } from '@ant-design/icons-vue'
 import { RouterLink, useRouter } from 'vue-router';
-import { h, ref } from 'vue';
-import { MailOutlined, UserOutlined, BookOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
+import { ref } from 'vue';
 
+
+const current = ref(['home']);
+
+
+const props = defineProps({
+    items: {
+        type: Array,
+        default: () => [],
+    },
+})
 const router = useRouter();
-const current = ref(['mail']);
-
+const items = props['items']
 const navigate = (path) => {
     router.push(path);
 };
-// const props = defineProps({
-//     items: {
-//         type: Array,
-//         default: () => [],
-//     },
-// })
-const items = ref([
+const menu = [
     {
-        key: 'home',
-        icon: () => h(MailOutlined),
-        label: '主页',
-        // 移除 href 属性，改用 onClick 进行导航
-        onClick: () => navigate('/home'),
+        "id": 1,
+        "title": "个人中心",
+        "path": "problem"
     },
     {
-        key: 'bank',
-        icon: () => h(BookOutlined),
-        label: '题库',
-        // 添加 onClick 属性进行导航
-        onClick: () => navigate('/problems'),
-    },
-    {
-        key: 'record',
-        icon: () => h(MenuUnfoldOutlined),
-        label: '提交记录',
-        // 添加 onClick 属性进行导航
-        onClick: () => navigate('/record'),
-    },
-]);
+        "id": 2,
+        "title": "退出",
+        "path": "problem"
+    }
+]
+// 下拉菜单
+const handleButtonClick = e => {
+    console.log('click left button', e);
+};
+const handleMenuClick = e => {
+    console.log('click', e);
+};
 </script>

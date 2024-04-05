@@ -1,20 +1,49 @@
 <template>
     <a-layout>
         <a-layout-header :style="headerStyle">
-            <NavBar />
+            <NavBar :items="items" />
         </a-layout-header>
         <a-layout>
             <a-layout-content :style="contentStyle">
                 <RouterView />
             </a-layout-content>
-            <a-layout-sider :style="siderStyle">Sider</a-layout-sider>
         </a-layout>
         <a-layout-footer :style="footerStyle">Footer</a-layout-footer>
     </a-layout>
 </template>
 <script setup>
 import NavBar from '@/components/Home/NavBar.vue';
-import { RouterView, RouterLink } from 'vue-router';
+import { RouterView, RouterLink, useRouter } from 'vue-router';
+import { h, ref } from 'vue'
+import { MailOutlined, UserOutlined, BookOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
+const router = useRouter();
+const navigate = (path) => {
+    router.push(path);
+};
+const items = ref([
+    {
+        key: 'home',
+        icon: () => h(MailOutlined),
+        label: '主页',
+        // 移除 href 属性，改用 onClick 进行导航
+        onClick: () => navigate('/home'),
+    },
+    {
+        key: 'bank',
+        icon: () => h(BookOutlined),
+        label: '题库',
+        // 添加 onClick 属性进行导航
+        onClick: () => navigate('/problems'),
+    },
+    {
+        key: 'record',
+        icon: () => h(MenuUnfoldOutlined),
+        label: '提交记录',
+        // 添加 onClick 属性进行导航
+        onClick: () => navigate('/record'),
+    },
+]);
+
 /**
  * @headerStyle {object} - Header style
  * @contentStyle {object} - Content style
@@ -28,7 +57,7 @@ const headerStyle = {
     paddingInline: 50,
     lineHeight: '64px',
     backgroundColor: '#fff',
-    
+
 };
 const contentStyle = {
     textAlign: 'center',
@@ -50,6 +79,4 @@ const footerStyle = {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
