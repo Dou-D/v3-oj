@@ -25,7 +25,12 @@ const current = ref(['mail']);
 const navigate = (path) => {
     router.push(path);
 };
-
+// const props = defineProps({
+//     items: {
+//         type: Array,
+//         default: () => [],
+//     },
+// })
 const items = ref([
     {
         key: 'home',

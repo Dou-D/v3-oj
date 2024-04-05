@@ -8,6 +8,7 @@ const router = createRouter({
       redirect: "/home",
       component: () => import("@/views/main.vue"),
       children: [
+        // 首页
         {
           path: "/home",
           name: "index",
@@ -25,6 +26,7 @@ const router = createRouter({
             },
           ]
         },
+        // 用户
         {
           path: "/user",
           name: "user",
@@ -42,7 +44,12 @@ const router = createRouter({
         }
       ]
     },
-
+    // 后台管理
+    {
+      path: "/console",
+      name: "console",
+      component: () => import("@/views/admin/index.vue"),
+    }
   ],
 });
 // router.beforeEach((to, from, next) => {

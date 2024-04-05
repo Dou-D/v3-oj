@@ -1,30 +1,17 @@
 import request from '@/utils/request'
 
 export function fetchProblemList(params) {
-  return request({
-    url: '/problem/list',
-    method: 'get',
-    params
-  })
+  request.get('/problem/list', { params })
 }
 
 export function fetchProblemDetail(problemId) {
-  return request({
-    url: `/problem/detail/${problemId}`,
-    method: 'get'
-  })
+  request.get('/problem/detail/' + problemId)
 }
 
 export function fetchProblemTagList() {
-  return request({
-    url: '/problem/tag/list',
-    method: 'get'
-  })
+  request.get('/problem/tag/list')
 }
 
 export function fetchProblemTagDetail(tagId) {
-  return request({
-    url: `/problem/tag/detail/${tagId}`,
-    method: 'get'
-  })
+  request.get('/problem/tag/detail/' + tagId)
 }

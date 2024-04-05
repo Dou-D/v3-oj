@@ -4,7 +4,7 @@
             <a-form :model="formState" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }"
                 autocomplete="off" @finish="onFinish" @finishFailed="onFinishFailed">
                 <a-form-item label="Username" name="username"
-                    :rules="[{ required: true, message: '请输入用户名' }]">
+                    :rules="[{ required: true, message: '请输入邮箱' }, emailRule]">
                     <a-input class="input" v-model:value="formState.username" />
                 </a-form-item>
 
@@ -29,6 +29,10 @@ const formState = reactive({
     username: '',
     password: '',
 });
+const emailRule = {
+  pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+  message: '请输入有效的电子邮件地址',
+};
 const onFinish = values => {
     console.log('Success:', values);
 };
