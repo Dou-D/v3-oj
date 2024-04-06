@@ -25,7 +25,7 @@
 import { UserOutlined } from '@ant-design/icons-vue'
 import { RouterLink, useRouter } from 'vue-router';
 import { ref } from 'vue';
-
+import storage from '@/services/storage';
 
 const current = ref(['home']);
 
@@ -56,6 +56,9 @@ const menu = [
 // 下拉菜单
 const handleButtonClick = e => {
     console.log('click left button', e);
+    if(!storage.get('sylu_user_token')){
+        navigate('/login')
+    }
 };
 const handleMenuClick = e => {
     console.log('click', e);

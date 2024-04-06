@@ -10,10 +10,12 @@
             <a-card title="Monaco Editor" style="height: 100vh;">
                 <a-row>
                     <a-col :span="8">
-                        <Cascader :options="optionsTheme" :defaultOption="'vs'" type="theme" @handleThemeItem="handleThemeItem" />
+                        <Cascader :options="optionsTheme" :defaultOption="'vs'" type="theme"
+                            @handleThemeItem="handleThemeItem" />
                     </a-col>
                     <a-col :span="8" :offset="8">
-                        <Cascader :options="optionsLanguage" :defaultOption="'C'" type="language" @handleLanguageItem="handleLanguageItem" />
+                        <Cascader :options="optionsLanguage" :defaultOption="'C'" type="language"
+                            @handleLanguageItem="handleLanguageItem" />
                     </a-col>
                 </a-row>
                 <a-divider />
@@ -55,7 +57,6 @@ const language = ref([{
 
 function handleLanguageItem(val) {
     language.value = val; // 假设val是选择的语言代码，如'javascript'
-    console.log(language.value, "language");
 }
 const optionsTheme = ref([{
     value: 'vs',
@@ -77,7 +78,6 @@ const theme = ref([
 ])
 function handleThemeItem(val) {
     theme.value = val; // 假设val是选择的主题代码，如'vs-dark'
-    console.log(theme.value, "theme");
 
 }
 

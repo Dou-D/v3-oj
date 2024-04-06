@@ -12,6 +12,8 @@ import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
 import Button from "primevue/button";
 import Slider from "primevue/slider";
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
 const app = createApp(App);
 
 app.use(VueMonacoEditorPlugin, {
@@ -24,7 +26,8 @@ app.use(VueMonacoEditorPlugin, {
 
 app.component("Slider", Slider);
 app.component("Button", Button);
-
+app.component("Toast", Toast);
+app.use(ToastService);
 app.use(createPinia());
 app.use(router);
 app.use(Antd);

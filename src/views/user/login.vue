@@ -1,56 +1,78 @@
 <template>
-    <a-row class="a-row">
-        <a-col :xs="20" :sm="16" :md="12" :lg="8">
-            <a-form :model="formState" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }"
-                autocomplete="off" @finish="onFinish" @finishFailed="onFinishFailed">
+    <a-row type="flex" justify="center" align="middle" style="min-height: 100vh;">
+        <a-col :span="8" style="text-align: center;">
+            <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
+                @finishFailed="onFinishFailed">
                 <a-form-item label="Username" name="username"
-                    :rules="[{ required: true, message: '请输入邮箱' }, emailRule]">
-                    <a-input class="input" v-model:value="formState.username" />
+                    :rules="[{ required: true, message: 'Please input your username!' }]">
+                    <a-input v-model:value="formState.username" show-count placeholder="输入用户名或者邮箱">
+                        <template #prefix>
+                            <UserOutlined class="site-form-item-icon" />
+                        </template>
+                    </a-input>
                 </a-form-item>
 
                 <a-form-item label="Password" name="password"
-                    :rules="[{ required: true, message: '请输入密码' }]">
-                    <a-input-password class="input" v-model:value="formState.password" />
+                    :rules="[{ required: true, message: 'Please input your password!' }]">
+                    <a-input-password v-model:value="formState.password" show-count placeholder="输入密码">
+                        <template #prefix>
+                            <LockOutlined class="site-form-item-icon" />
+                        </template>
+                    </a-input-password>
                 </a-form-item>
 
-                <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-                    <a-button type="primary" html-type="submit">登录</a-button>
-                    <a-button type="primary" html-type="submit">注册</a-button>
+                <a-form-item>
+                    <a-flex :justify="'center'" :align="center">
+                        <a-checkbox v-model:checked="formState.remember">Remember me</a-checkbox>
+                        <a class="login-form-forgot" href="">Forgot password</a>
+                    </a-flex>
                 </a-form-item>
+
+                <a-form-item>
+                    <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button">
+                        Log in
+                    </a-button>
+                    Or
+                    <RouterLink to="/register">
+                        <a-button type="primary">register now!</a-button>
+                    </RouterLink>
+                </a-form-item>
+                
             </a-form>
         </a-col>
     </a-row>
-
-
 </template>
+
 <script setup>
-import { reactive } from 'vue';
+import { RouterLink } from 'vue-router';
+import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
+import { reactive, computed } from 'vue';
 const formState = reactive({
     username: '',
     password: '',
+    remember: true,
 });
-const emailRule = {
-  pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-  message: '请输入有效的电子邮件地址',
-};
 const onFinish = values => {
     console.log('Success:', values);
 };
 const onFinishFailed = errorInfo => {
-    throw Error(err)
+    console.log('Failed:', errorInfo);
 };
+const disabled = computed(() => {
+    return !(formState.username && formState.password);
+});
 </script>
-
 <style scoped>
-.a-row {
-    display: flex;
-    justify-content: center; /* 水平居中 */
-    align-items: center; /* 垂直居中 */
-    height: 100vh; /* 视窗高度 */
+#components-form-demo-normal-login .login-form {
+    max-width: 300px;
 }
 
-.input {
-    max-width: 20vh;
+#components-form-demo-normal-login .login-form-forgot {
+    float: right;
+}
+
+#components-form-demo-normal-login .login-form-button {
     width: 100%;
 }
+
 </style>
