@@ -17,8 +17,8 @@ const app = createApp(App);
 app.use(VueMonacoEditorPlugin, {
   paths: {
     // The recommended CDN config
-    vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs",
-    // vs: "monaco-editor/min/vs"
+    // vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs",
+    vs: "../node_modules/monaco-editor/min/vs"
   },
 });
 

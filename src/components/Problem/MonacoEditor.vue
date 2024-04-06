@@ -1,6 +1,6 @@
 <template>
     <vue-monaco-editor style="height: 50vh;" :theme="props['theme']" original="// the original code" modified="// the modified code"
-        language="C" :options="OPTIONS" @mount="handleMount"/>
+        :language="props.language" :options="OPTIONS" @mount="handleMount"/>
 </template>
 
 
@@ -21,13 +21,5 @@ const handleMount = (diffEditor) => {
     diffEditorRef.value = diffEditor
 }
 console.log("props.theme, props.language",props.theme, props.language);
-// 获取原始值
-function getOriginalValue() {
-    return diffEditorRef.value ? diffEditorRef.value.getOriginalEditor().getValue() : null;
-}
 
-// 获取修改后的值
-function getModifiedValue() {
-    return diffEditorRef.value ? diffEditorRef.value.getModifiedEditor().getValue() : null;
-}
 </script>

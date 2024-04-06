@@ -3,13 +3,16 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref } from 'vue';
 
-const props = defineProps(['options', 'defaultOption', 'language']);
-const emit = defineEmits(['handleThemeItem'])
+const props = defineProps(['options', 'defaultOption', 'type']);
+const emit = defineEmits(['handleThemeItem', 'handleLanguageItem'])
 const value = ref();
-
 function changeItem() {
-    emit('handleThemeItem', value.value[0])
+    if (props.type === 'theme') {
+        emit('handleThemeItem', value.value[0]);
+    } else if (props.type === 'language') {
+        emit('handleLanguageItem', value.value[0]);
+    }
 }
 </script>
