@@ -31,22 +31,24 @@ const router = createRouter({
           path: "/user",
           name: "user",
           component: () => import("@/views/user/index.vue"),
+          children: [
+            {
+              path: '/user/changepassword',
+              name: 'changepassword',
+              component: () => import('@/views/user/changePassword.vue')
+            },
+            {
+              path: "/user/login",
+              name: "login",
+              component: () => import("@/views/user/login.vue"),
+            },
+            {
+              path: "/user/register",
+              name: "register",
+              component: () => import("@/views/user/register.vue"),
+            }
+          ]
         },
-        {
-          path: '/changepassword',
-          name: 'changepassword',
-          component: () => import('@/views/user/changePassword.vue')
-        },
-        {
-          path: "/login",
-          name: "login",
-          component: () => import("@/views/user/login.vue"),
-        },
-        {
-          path: "/register",
-          name: "register",
-          component: () => import("@/views/user/register.vue"),
-        }
       ]
     },
     // 后台管理
@@ -54,6 +56,13 @@ const router = createRouter({
       path: "/console",
       name: "console",
       component: () => import("@/views/admin/index.vue"),
+      children: [
+        {
+          path: "/console/addproblem",
+          name: "problem",
+          component: () => import("@/views/admin/addproblem.vue"),
+        }
+      ]
     }
   ],
 });

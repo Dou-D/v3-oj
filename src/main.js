@@ -14,6 +14,8 @@ import Button from "primevue/button";
 import Slider from "primevue/slider";
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
+import Editor from 'primevue/editor';
+import Dialog from 'primevue/dialog';
 const app = createApp(App);
 
 app.use(VueMonacoEditorPlugin, {
@@ -24,6 +26,8 @@ app.use(VueMonacoEditorPlugin, {
   },
 });
 
+app.component("Dialog", Dialog);
+app.component("Editor", Editor);
 app.component("Slider", Slider);
 app.component("Button", Button);
 app.component("Toast", Toast);

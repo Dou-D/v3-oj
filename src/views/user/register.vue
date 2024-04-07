@@ -38,21 +38,22 @@
                 <!-- Verification Code -->
                 <a-form-item label="Verification Code"
                     :rules="[{ required: true, message: 'Please input the verification code!' }]">
-                    <a-input-group compact>
-                        <a-input v-model:value="formState.verify_code" style="width: calc(100% - 200px)" />
+                    <a-flex gap="middle" align="middle">
+                        <a-input v-model:value="formState.verify_code" style="flex-grow: 1;" />
                         <a-button type="primary" :disabled="countdown > 0" @click="handleGetVerificationCode">
                             {{ countdown > 0 ? `${countdown} 秒` : '获取验证码' }}
                         </a-button>
-                    </a-input-group>
+                    </a-flex>
                 </a-form-item>
 
                 <!-- Submit -->
                 <a-form-item>
-                    <a-button @click="handleGetRegistration" :disabled="disabled" type="primary" html-type="submit" class="login-form-button">
+                    <a-button @click="handleGetRegistration" :disabled="disabled" type="primary" html-type="submit"
+                        class="login-form-button">
                         Register
                     </a-button>
                     Or
-                    <RouterLink to="/login">
+                    <RouterLink to="/user/login">
                         <a-button type="default">login now!</a-button>
                     </RouterLink>
                 </a-form-item>
@@ -63,7 +64,7 @@
 
 <script setup>
 import { getRegisterAPI, getVerificationCodeAPI } from '@/services/user'
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons-vue';
 import { reactive, computed, ref } from 'vue';
 // primevue toast配置
@@ -81,15 +82,17 @@ const formState = reactive({
 });
 function handleGetRegistration() {
     const res = getRegisterAPI(formState)
-    if (res.data.code !== 200) {
+    if (res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
         return
     }
-    toast.add({ severity:'success', summary: '注册成功', life: 3000 });
+    toast.add({ severity: 'success', summary: '注册成功', life: 3000 })
     formState.username = '';
     formState.password = '';
     formState.email = '';
     formState.verify_code = '';
+    const router = useRouter();
+    router.replace('/')
 }
 const countdown = ref(0);
 
@@ -102,11 +105,11 @@ const onFinishFailed = errorInfo => {
 
 // 点击获取验证码
 const handleGetVerificationCode = async () => {
-    const res = getVerificationCodeAPI()
-    if (res.data.code !== 200) {
-        toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
-        return
-    }
+    // const res = getVerificationCodeAPI()
+    // if (res.data.code != 200) {
+    //     toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
+    //     return
+    // }
     countdown.value = 60;
     const interval = setInterval(() => {
         countdown.value--;

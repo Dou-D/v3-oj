@@ -57,7 +57,7 @@ const menu = [
 const handleButtonClick = e => {
     console.log('click left button', e);
     if(!storage.get('sylu_user_token')){
-        navigate('/login')
+        navigate('/user/login')
     }
 };
 const handleMenuClick = e => {

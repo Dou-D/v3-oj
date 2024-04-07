@@ -1,4 +1,5 @@
 <template>
+    <Toast />
     <a-row type="flex" justify="center" align="middle" style="min-height: 100vh;">
         <a-col :span="8" style="text-align: center;">
             <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
@@ -29,24 +30,30 @@
                 </a-form-item>
 
                 <a-form-item>
-                    <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button">
+                    <a-button @click="handleLogin" :disabled="disabled" type="primary" html-type="submit"
+                        class="login-form-button">
                         Log in
                     </a-button>
                     Or
-                    <RouterLink to="/register">
+                    <RouterLink to="/user/register">
                         <a-button type="primary">register now!</a-button>
                     </RouterLink>
                 </a-form-item>
-                
+
             </a-form>
         </a-col>
     </a-row>
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { reactive, computed } from 'vue';
+import { getLoginAPI } from '@/services/user'
+// primevue toast
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
+
 const formState = reactive({
     username: '',
     password: '',
@@ -61,6 +68,17 @@ const onFinishFailed = errorInfo => {
 const disabled = computed(() => {
     return !(formState.username && formState.password);
 });
+
+const handleLogin = async () => {
+    const res = await getLoginAPI({ username: formState.username, password: formState.password });
+    if (res.data.code != 200) {
+        toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
+        return
+    }
+    toast.add({ severity:'success', summary: res.data.msg, life: 3000 });
+    const router = useRouter();
+    router.replace('/')
+}
 </script>
 <style scoped>
 #components-form-demo-normal-login .login-form {
@@ -74,5 +92,4 @@ const disabled = computed(() => {
 #components-form-demo-normal-login .login-form-button {
     width: 100%;
 }
-
 </style>
