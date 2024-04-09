@@ -54,13 +54,25 @@ const router = createRouter({
     // 后台管理
     {
       path: "/console",
-      name: "console",
+      redirect: "/console/problems",
       component: () => import("@/views/admin/index.vue"),
       children: [
+        // 添加题目
         {
           path: "/console/addproblem",
-          name: "problem",
           component: () => import("@/views/admin/addproblem.vue"),
+        },
+        {
+          path: "/console/problems",
+          component: () => import("@/views/admin/problems.vue"),
+        },
+        {
+          path: "/console/users",
+          component: () => import("@/views/admin/users.vue"),
+        },
+        {
+          path: "/console/problem",
+          component: () => import("@/views/admin/problem.vue"),
         }
       ]
     }
