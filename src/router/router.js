@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import storage from "@/services/storage"
+import storage from "@/services/storage";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -24,58 +24,58 @@ const router = createRouter({
               name: "problem",
               component: () => import("@/views/problem/problem.vue"),
             },
-          ]
-        },
-        // 用户
-        {
-          path: "/user",
-          name: "user",
-          component: () => import("@/views/user/index.vue"),
-          children: [
+            // 用户
+            // 后台管理
             {
-              path: '/user/changepassword',
-              name: 'changepassword',
-              component: () => import('@/views/user/changePassword.vue')
+              path: "/console",
+              redirect: "/console/problems",
+              component: () => import("@/views/admin/index.vue"),
+              children: [
+                // 添加题目
+                {
+                  path: "/console/addproblem",
+                  component: () => import("@/views/admin/addproblem.vue"),
+                },
+                {
+                  path: "/console/problems",
+                  component: () => import("@/views/admin/problems.vue"),
+                },
+                {
+                  path: "/console/users",
+                  component: () => import("@/views/admin/users.vue"),
+                },
+                {
+                  path: "/console/problem",
+                  component: () => import("@/views/admin/problem.vue"),
+                },
+              ],
             },
-            {
-              path: "/user/login",
-              name: "login",
-              component: () => import("@/views/user/login.vue"),
-            },
-            {
-              path: "/user/register",
-              name: "register",
-              component: () => import("@/views/user/register.vue"),
-            }
-          ]
+          ],
         },
-      ]
+      ],
     },
-    // 后台管理
     {
-      path: "/console",
-      redirect: "/console/problems",
-      component: () => import("@/views/admin/index.vue"),
+      path: "/user",
+      name: "user",
+      component: () => import("@/views/user/index.vue"),
       children: [
-        // 添加题目
         {
-          path: "/console/addproblem",
-          component: () => import("@/views/admin/addproblem.vue"),
+          path: "/user/changepassword",
+          name: "changepassword",
+          component: () => import("@/views/user/changePassword.vue"),
         },
         {
-          path: "/console/problems",
-          component: () => import("@/views/admin/problems.vue"),
+          path: "/user/login",
+          name: "login",
+          component: () => import("@/views/user/login.vue"),
         },
         {
-          path: "/console/users",
-          component: () => import("@/views/admin/users.vue"),
+          path: "/user/register",
+          name: "register",
+          component: () => import("@/views/user/register.vue"),
         },
-        {
-          path: "/console/problem",
-          component: () => import("@/views/admin/problem.vue"),
-        }
-      ]
-    }
+      ],
+    },
   ],
 });
 // router.beforeEach((to, from, next) => {

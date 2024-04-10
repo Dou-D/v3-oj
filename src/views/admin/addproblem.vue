@@ -12,12 +12,7 @@
             <div>
                 <span>题目难度：</span>
                 <a-radio-group v-model:value="difficulty">
-                    <a-radio-button value="0">0</a-radio-button>
-                    <a-radio-button value="1">1</a-radio-button>
-                    <a-radio-button value="2">2</a-radio-button>
-                    <a-radio-button value="3">3</a-radio-button>
-                    <a-radio-button value="4">4</a-radio-button>
-                    <a-radio-button value="5">5</a-radio-button>
+                    <a-radio-button v-for="item in 5" value="item+1">{{ item }}</a-radio-button>
                 </a-radio-group>
             </div>
             <!-- 题目tag -->
@@ -29,7 +24,14 @@
 
             <!-- 新增标签按钮 -->
             <a-button @click="showDialog = true">新增标签</a-button>
-
+            <div>
+                <label>测试用例</label>
+                <a-input v-model:value="testInput" placeholder="测试用例" />
+            </div>
+            <div>
+                <label>期望输出</label>
+                <a-input v-model:value="expectedOutput" placeholder="期望输出" />
+            </div>
             <!-- 输入标签名称的弹窗 -->
             <Dialog v-model:visible="showDialog" modal header="新增标签" :style="{ width: '30rem' }">
                 <div class="p-fluid">
@@ -55,12 +57,26 @@ import { ref } from 'vue';
 const title = ref('');
 const content = ref('');
 const difficulty = ref('easy');
-
+const testInput = ref('');
+const expectedOutput = ref('');
+// const submitQuestion = () => {
+//     console.log('Title:', title.value);
+//     console.log('Content:', content.value);
+//     console.log('Difficulty:', Number(difficulty.value));
+//     console.log('Tags:', tags.value[0]);
+//     // 实际应用中，在这里可以处理数据提交到后端的逻辑
+// };
 const submitQuestion = () => {
+    if (!title.value.trim() || !content.value.trim() || !difficulty.value || !testInput.value.trim() || !expectedOutput.value.trim()) {
+        alert('确保输入全部内容');
+        return;
+    }
     console.log('Title:', title.value);
     console.log('Content:', content.value);
-    console.log('Difficulty:', Number(difficulty.value));
-    console.log('Tags:', tags.value[0]);
+    console.log('Difficulty:', difficulty.value);
+    console.log('Tags:', tags.value);
+    console.log('testInput', testInput.value);
+    console.log('expectedOutput', expectedOutput.value);
     // 实际应用中，在这里可以处理数据提交到后端的逻辑
 };
 
@@ -92,8 +108,8 @@ const removeTag = (index) => {
 
 /* 根据需要添加更多样式 */
 .dialog-footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
 }
 </style>
