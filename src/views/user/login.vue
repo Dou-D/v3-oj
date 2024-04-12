@@ -50,7 +50,7 @@
 import { RouterLink, useRouter } from 'vue-router';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { reactive, computed } from 'vue';
-import { getLoginAPI } from '@/services/user'
+import { getLoginAPI } from '@/services/user.js'
 // primevue toast
 import { useToast } from 'primevue/usetoast';
 import { useUserStore } from '@/stores/user'
@@ -77,6 +77,7 @@ const handleLogin = async () => {
     const spinning = ref(true)
     const res = await getLoginAPI({ username: formState.username, password: formState.password });
     spinning.value = false
+    console.log(res,"res");
     if (res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
         return

@@ -8,7 +8,7 @@ import request from '@/utils/request'
  */
 export function fetchProblemList({ page, number }) {
   return request.get('/question/list',
-    { page, number },
+    { params: { page: page, number: number} },
     {
       headers: { "Content-Type": "multipart/form-data" }
     })
