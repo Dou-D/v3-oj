@@ -1,5 +1,6 @@
 <template>
     <Toast />
+    <a-spin :spinning="spinning" />
     <div class="upload-container">
         <a-space direction="vertical" size="large">
             <div>
@@ -74,6 +75,7 @@ const submitQuestion = async () => {
         alert('确保输入全部内容');
         return;
     }
+    const spinning = ref(true);
     const res = await fetchUploadQuestion({
         title: title.value,
         content: content.value,
@@ -82,6 +84,7 @@ const submitQuestion = async () => {
         input_test: testInput.value,
         expected_output: expectedOutput.value
     });
+    spinning.value = false;
     if(res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg });
         return

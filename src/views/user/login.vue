@@ -1,5 +1,6 @@
 <template>
     <Toast />
+    <a-spin :spinning="spinning" />
     <a-row type="flex" justify="center" align="middle" style="min-height: 100vh;">
         <a-col :span="8" style="text-align: center;">
             <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
@@ -53,6 +54,7 @@ import { getLoginAPI } from '@/services/user'
 // primevue toast
 import { useToast } from 'primevue/usetoast';
 import { useUserStore } from '@/stores/user'
+import { ref } from 'vue';
 const toast = useToast();
 
 const formState = reactive({
@@ -72,7 +74,9 @@ const disabled = computed(() => {
 
 // 开始登录
 const handleLogin = async () => {
+    const spinning = ref(true)
     const res = await getLoginAPI({ username: formState.username, password: formState.password });
+    spinning.value = false
     if (res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
         return

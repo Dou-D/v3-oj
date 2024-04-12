@@ -1,6 +1,6 @@
 <template>
   <Toast />
-  <a-spin spinning="true" />
+  <a-spin :spinning="spinning" />
   <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination">
     <template #bodyCell="{ record, column }">
       <template v-if="column.dataIndex === 'tag'">
@@ -21,7 +21,7 @@
 
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { MailOutlined, UserOutlined, BookOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { fetchProblemList } from '@/services/problem'
 // 示例数据，实际项目中应从后端获取
@@ -89,9 +89,15 @@ const pagination = {
     ProblemListAPI()
   }
 }
+onMounted(() => {
+  ProblemListAPI()
+})
+const spinning = ref(true)
+
 const ProblemListAPI = async () => {
   const res = await fetchProblemList({ page: pagination.pageCurrent, number: pagination.pageSize })
-  if (res.data.code != 0){
+  spinning.value = false
+  if (res.data.code != 0) {
     toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
     return
   }

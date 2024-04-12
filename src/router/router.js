@@ -29,24 +29,24 @@ const router = createRouter({
             {
               path: "/console",
               redirect: "/console/problems",
+              meta: { auth: true },
               component: () => import("@/views/admin/index.vue"),
               children: [
                 // 添加题目
                 {
                   path: "/console/addproblem",
+                  meta: { auth: true },
                   component: () => import("@/views/admin/addproblem.vue"),
                 },
                 {
                   path: "/console/problems",
+                  meta: { auth: true },
                   component: () => import("@/views/admin/problems.vue"),
                 },
                 {
                   path: "/console/users",
+                  meta: { auth: true },
                   component: () => import("@/views/admin/users.vue"),
-                },
-                {
-                  path: "/console/problem",
-                  component: () => import("@/views/admin/problem.vue"),
                 },
               ],
             },
@@ -59,11 +59,11 @@ const router = createRouter({
       name: "user",
       component: () => import("@/views/user/index.vue"),
       children: [
-        {
-          path: "/user/changepassword",
-          name: "changepassword",
-          component: () => import("@/views/user/changePassword.vue"),
-        },
+        // {
+        //   path: "/user/changepassword",
+        //   name: "changepassword",
+        //   component: () => import("@/views/user/changePassword.vue"),
+        // },
         {
           path: "/user/login",
           name: "login",
@@ -78,12 +78,12 @@ const router = createRouter({
     },
   ],
 });
-// router.beforeEach((to, from, next) => {
-//     const token = storage.get("metc_user_token")
-//     if (to.meta.auth && !token) {
-//         next({path: "/admin"});
-//     } else {
-//         next();
-//     }
-// });
+router.beforeEach((to, from, next) => {
+  const token = storage.get("metc_user_token")
+  if (to.meta.auth && !token) {
+    next({ path: "/user/login" });
+  } else {
+    next();
+  }
+});
 export default router;
