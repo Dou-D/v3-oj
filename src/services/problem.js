@@ -1,17 +1,42 @@
 import request from '@/utils/request'
 
-export function fetchProblemList(params) {
-  return request.get('/problem/list', { params })
+/**
+ * 
+ * @param {number} page 
+ * @param {number} number 
+ * @returns Promise<any>
+ */
+export function fetchProblemList({ page, number }) {
+  return request.get('/question/list',
+    { page, number },
+    {
+      headers: { "Content-Type": "multipart/form-data" }
+    })
 }
-
+/**
+ * 
+ * @param {string} problemId 
+ * @returns Promise<any>
+ */
 export function fetchProblemDetail(problemId) {
-  return request.get('/problem/detail/' + problemId)
+  return request.get('/problem/detail/',
+    { id: problemId }
+  )
+}
+/**
+ * 
+ * @param {string} answer 
+ * @param {number} id 
+ * @returns 
+ */
+export function fetchUploadAnswer(answer, id) {
+  return request.post('/question/commit_answer',
+    { answer, id },
+  )
 }
 
-export function fetchProblemTagList() {
-  return request.get('/problem/tag/list')
-}
-
-export function fetchProblemTagDetail(tagId) {
-  return request.get('/problem/tag/detail/' + tagId)
+export function fetchUploadQuestion({ title, content, degree, tag, input_test, expected_output }) {
+  return request.post('/question/add_question',
+    { title, content, degree, tag, input_test, expected_output },
+  )
 }

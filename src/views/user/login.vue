@@ -52,6 +52,7 @@ import { reactive, computed } from 'vue';
 import { getLoginAPI } from '@/services/user'
 // primevue toast
 import { useToast } from 'primevue/usetoast';
+import { useUserStore } from '@/stores/user'
 const toast = useToast();
 
 const formState = reactive({
@@ -76,7 +77,9 @@ const handleLogin = async () => {
         toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
         return
     }
-    toast.add({ severity:'success', summary: res.data.msg, life: 3000 });
+    toast.add({ severity: 'success', summary: res.data.msg, life: 3000 });
+    const userStore = useUserStore();
+    userStore.menu.push(...res.data.data.menu)
     const router = useRouter();
     router.replace('/')
 }

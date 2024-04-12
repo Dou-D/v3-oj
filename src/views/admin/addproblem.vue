@@ -1,4 +1,5 @@
 <template>
+    <Toast />
     <div class="upload-container">
         <a-space direction="vertical" size="large">
             <div>
@@ -53,7 +54,9 @@
 
 <script setup>
 import { ref } from 'vue';
-
+import { fetchUploadQuestion } from '@/services/problem'
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 const title = ref('');
 const content = ref('');
 const difficulty = ref('easy');
@@ -66,18 +69,24 @@ const expectedOutput = ref('');
 //     console.log('Tags:', tags.value[0]);
 //     // 实际应用中，在这里可以处理数据提交到后端的逻辑
 // };
-const submitQuestion = () => {
+const submitQuestion = async () => {
     if (!title.value.trim() || !content.value.trim() || !difficulty.value || !testInput.value.trim() || !expectedOutput.value.trim()) {
         alert('确保输入全部内容');
         return;
     }
-    console.log('Title:', title.value);
-    console.log('Content:', content.value);
-    console.log('Difficulty:', difficulty.value);
-    console.log('Tags:', tags.value);
-    console.log('testInput', testInput.value);
-    console.log('expectedOutput', expectedOutput.value);
-    // 实际应用中，在这里可以处理数据提交到后端的逻辑
+    const res = await fetchUploadQuestion({
+        title: title.value,
+        content: content.value,
+        tag: tags.value,
+        degree: Number(difficulty.value),
+        input_test: testInput.value,
+        expected_output: expectedOutput.value
+    });
+    if(res.data.code != 200) {
+        toast.add({ severity: 'error', summary: res.data.msg });
+        return
+    }
+    toast.add({ severity:'success', summary: res.data.msg });
 };
 
 // 题目tag逻辑

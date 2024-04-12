@@ -105,11 +105,11 @@ const onFinishFailed = errorInfo => {
 
 // 点击获取验证码
 const handleGetVerificationCode = async () => {
-    // const res = getVerificationCodeAPI()
-    // if (res.data.code != 200) {
-    //     toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
-    //     return
-    // }
+    const res = getVerificationCodeAPI()
+    if (res.data.code != 200) {
+        toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
+        return
+    }
     countdown.value = 60;
     const interval = setInterval(() => {
         countdown.value--;

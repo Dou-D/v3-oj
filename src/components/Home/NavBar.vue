@@ -11,7 +11,7 @@
                 dou
                 <template #overlay>
                     <a-menu @click="handleMenuClick">
-                        <a-menu-item v-for="item in menu" :key="item.id" @click="navigate(item.path)" >
+                        <a-menu-item v-for="item in menu" :key="item.id" @click="navigate(item.path)">
                             {{ item.title }}
                         </a-menu-item>
                     </a-menu>
@@ -26,7 +26,7 @@ import { UserOutlined } from '@ant-design/icons-vue'
 import { RouterLink, useRouter } from 'vue-router';
 import { ref } from 'vue';
 import storage from '@/services/storage';
-
+import { useUserStore } from '@/stores/user'
 const current = ref(['home']);
 
 
@@ -41,22 +41,14 @@ const items = props['items']
 const navigate = (path) => {
     router.push(path);
 };
-const menu = [
-    {
-        "id": 1,
-        "title": "个人中心",
-        "path": "problem"
-    },
-    {
-        "id": 2,
-        "title": "退出",
-        "path": "problem"
-    }
-]
+
+const menu = ref([])
+const userStore = useUserStore()
+menu.value = userStore.menu
 // 下拉菜单
 const handleButtonClick = e => {
     console.log('click left button', e);
-    if(!storage.get('sylu_user_token')){
+    if (!storage.get('sylu_user_token')) {
         navigate('/user/login')
     }
 };
