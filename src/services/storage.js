@@ -12,9 +12,11 @@ const set = (key, value) => {
 
 const get = (key) => localStorage.getItem(key);
 
+const remove = (key) => localStorage.removeItem(key);
 export default {
   set,
   get,
+  remove,
   USER_TOKEN,
   USER_INFO,
 };

@@ -55,4 +55,10 @@ const handleButtonClick = e => {
 const handleMenuClick = e => {
     console.log('click', e);
 };
+// 退出登录
+const logout = () => {
+    storage.remove('sylu_user_token')
+    userStore.logout()
+    navigate('/user/login')
+}
 </script>
