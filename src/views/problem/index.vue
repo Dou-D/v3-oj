@@ -1,9 +1,9 @@
 <template>
-    <ProbleTable />
+    <ProblemTable />
 
 </template>
 
 <script setup>
-import ProbleTable from "@/components/Problem/ProblemTable.vue";
+import ProblemTable from "@/components/Problem/ProblemTable.vue";
 </script>
 

@@ -3,6 +3,10 @@
         <a-col flex="1 1 200px">
             <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
         </a-col>
+        <a-flex align="center">
+            <a-input-search v-model:value="value" placeholder="input search text" size="large" enter-button="Search"
+                @search="onSearch" />
+        </a-flex>
         <a-col flex="0 1 300px">
             <a-avatar style="background-color: #87d068">
                 <UserOutlined />
@@ -29,6 +33,11 @@ import storage from '@/services/storage';
 import { useUserStore } from '@/stores/user'
 const current = ref(['home']);
 
+// 搜索框
+const value = ref('');
+const onSearch = (val) => {
+    console.log(val);
+}
 
 const props = defineProps({
     items: {

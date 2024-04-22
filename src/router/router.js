@@ -78,12 +78,12 @@ const router = createRouter({
     },
   ],
 });
-router.beforeEach((to, from, next) => {
-  const token = storage.get("metc_user_token")
-  if (to.meta.auth && !token) {
-    next({ path: "/user/login" });
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   const token = storage.get("metc_user_token")
+//   if (to.meta.auth && !token) {
+//     next({ path: "/user/login" });
+//   } else {
+//     next();
+//   }
+// });
 export default router;

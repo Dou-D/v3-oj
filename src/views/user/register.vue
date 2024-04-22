@@ -1,6 +1,5 @@
 <template>
     <Toast />
-    <a-spin :spinning="spinning" />
     <a-row type="flex" justify="center" align="middle" style="min-height: 100vh;">
         <a-col :span="8" style="text-align: center;">
             <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
@@ -106,9 +105,7 @@ const onFinishFailed = errorInfo => {
 
 // 点击获取验证码
 const handleGetVerificationCode = async () => {
-    const spinning = ref(true)
     const res = await getVerificationCodeAPI()
-    spinning.value = false
     if (res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
         return

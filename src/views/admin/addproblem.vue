@@ -1,6 +1,5 @@
 <template>
     <Toast />
-    <a-spin :spinning="spinning" />
     <div class="upload-container">
         <a-space direction="vertical" size="large">
             <div>
@@ -14,7 +13,7 @@
             <div>
                 <span>题目难度：</span>
                 <a-radio-group v-model:value="difficulty">
-                    <a-radio-button v-for="item in 5" value="item+1">{{ item }}</a-radio-button>
+                    <a-radio-button v-for="item in 5" :value="item+1">{{ item }}</a-radio-button>
                 </a-radio-group>
             </div>
             <!-- 题目tag -->
@@ -24,16 +23,40 @@
                 </a-tag>
             </div>
 
+
             <!-- 新增标签按钮 -->
             <a-button @click="showDialog = true">新增标签</a-button>
-            <div>
+            <!-- <div>
                 <label>测试用例</label>
                 <a-input v-model:value="testInput" placeholder="测试用例" />
             </div>
             <div>
                 <label>期望输出</label>
                 <a-input v-model:value="expectedOutput" placeholder="期望输出" />
+            </div> -->
+            <div>
+                <a-tag v-for="(tag, index) in IOtag" :key="index" closable @close="removeTag(index)">
+                    {{ tag }}
+                </a-tag>
             </div>
+            <a-button @click="showIODialog = true">输入输出</a-button>
+            <!-- 输入输出 -->
+            <Dialog v-model:visible="showIODialog" modal header="新增输入输出" :style="{ width: '30rem' }">
+                <div class="p-fluid">
+                    <div class="p-field">
+                        <label for="tag-name">输入</label>
+                        <a-input v-model:value="input" placeholder="输入" />
+                    </div>
+                    <div class="p-field">
+                        <label for="tag-name">输出</label>
+                        <a-input v-model:value="output" placeholder="输出" />
+                    </div>
+                </div>
+                <div class="dialog-footer">
+                    <a-button @click="showIODialog = false">取消</a-button>
+                    <a-button type="primary" @click="addIOTag">确认</a-button>
+                </div>
+            </Dialog>
             <!-- 输入标签名称的弹窗 -->
             <Dialog v-model:visible="showDialog" modal header="新增标签" :style="{ width: '30rem' }">
                 <div class="p-fluid">
@@ -51,7 +74,7 @@
             <a-button type="primary" @click="submitQuestion">提交题目</a-button>
         </a-space>
     </div>
-</template>
+</template> 
 
 <script setup>
 import { ref } from 'vue';
@@ -60,7 +83,7 @@ import { useToast } from 'primevue/usetoast';
 const toast = useToast();
 const title = ref('');
 const content = ref('');
-const difficulty = ref('easy');
+const difficulty = ref();
 const testInput = ref('');
 const expectedOutput = ref('');
 // const submitQuestion = () => {
@@ -75,7 +98,6 @@ const submitQuestion = async () => {
         alert('确保输入全部内容');
         return;
     }
-    const spinning = ref(true);
     const res = await fetchUploadQuestion({
         title: title.value,
         content: content.value,
@@ -84,13 +106,30 @@ const submitQuestion = async () => {
         input_test: testInput.value,
         expected_output: expectedOutput.value
     });
-    spinning.value = false;
     if(res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg });
         return
     }
     toast.add({ severity:'success', summary: res.data.msg });
 };
+
+// io tag
+const IOtag = ref([])
+const showIODialog = ref(false)
+const input = ref('')
+const output = ref('')
+const addIOTag = () => {
+    if(input.value.trim() && output.value.trim()){
+        IOtag.value.push({
+            input: input.value,
+            output: output.value
+        })
+        input.value = ''
+        output.value = ''
+        showIODialog.value = false
+    }
+}
+
 
 // 题目tag逻辑
 const tags = ref([]);

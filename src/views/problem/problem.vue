@@ -1,7 +1,5 @@
 <template>
     <Toast />
-    <a-spin :spinning="spinning" />
-
     <a-row gutter={16}>
         <a-col :span="12">
             <a-card title="题目信息">
@@ -9,6 +7,7 @@
                 <div v-html="questionInfo"></div>
             </a-card>
         </a-col>
+        
         <a-col :span="12">
             <a-card title="Monaco Editor" style="height: 100vh;">
                 <a-row>
@@ -109,9 +108,7 @@ function getProblemId() {
 }
 onMounted(async () => {
     const id = getProblemId();
-    const spinning = ref(true);
     const res = await fetchProblemDetail(String(id));
-    spinning.value = false;
     if (res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg });
         return
@@ -124,9 +121,7 @@ onMounted(async () => {
 const code = ref('');
 const uploadAnswer = async () => {
     const id = Number(getProblemId());
-    const spinning = ref(true);
     const res = await fetchUploadAnswer({ id, answer: code.value });
-    spinning.value = false;
     if (res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg });
         return

@@ -1,6 +1,5 @@
 <template>
     <Toast />
-    <a-spin :spinning="spinning" />
     <a-row type="flex" justify="center" align="middle" style="min-height: 100vh;">
         <a-col :span="8" style="text-align: center;">
             <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
@@ -40,7 +39,6 @@
                         <a-button type="primary">register now!</a-button>
                     </RouterLink>
                 </a-form-item>
-
             </a-form>
         </a-col>
     </a-row>
@@ -74,9 +72,7 @@ const disabled = computed(() => {
 
 // 开始登录
 const handleLogin = async () => {
-    const spinning = ref(true)
     const res = await getLoginAPI({ username: formState.username, password: formState.password });
-    spinning.value = false
     console.log(res,"res");
     if (res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
@@ -89,6 +85,7 @@ const handleLogin = async () => {
     router.replace('/')
 }
 </script>
+
 <style scoped>
 #components-form-demo-normal-login .login-form {
     max-width: 300px;
