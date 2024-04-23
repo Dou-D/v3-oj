@@ -1,6 +1,6 @@
 <template>
   <Toast />
-  <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination" @change="onChange">
+  <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination">
     <template #bodyCell="{ record, column }">
       <template v-if="column.dataIndex === 'tag'">
         <a-tag color="#2db7f5" v-for="tag in record.tag" :key="tag">{{ tag }}</a-tag>
@@ -84,16 +84,11 @@ const pagination = {
   pageOptions: ['10', '20', '30', '40'], // 每页数量选项
   showTotal: total => `Total ${total}`, // 显示总数
   onChange(page, number) {
-    this.page = page
-    this.number = number
-    ProblemListAPI()
+    changeRoute(number, page)
   }
 }
 const router = useRouter();
 const route = useRoute();
-const onChange = (number, page) => {
-  changeRoute(number, page)
-}
 onMounted(() => {
   changeRoute(pagination.page, pagination.number)
   ProblemListAPI();
@@ -112,7 +107,6 @@ const changeRoute = (number, page) => {
   console.log(route.query,"route");
   router.push({ name: route.name, query })
   ProblemListAPI(route.query.page, route.query.number)
-
 }
 
 /**
