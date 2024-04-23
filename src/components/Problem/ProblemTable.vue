@@ -81,7 +81,7 @@ const pagination = {
   page: 20, // 默认每页显示数量
   number: 1, // 当前页数
   showSizeChanger: true, // 显示可改变每页数量
-  pageOptions: ['10', '20', '30', '40'], // 每页数量选项
+  pageOptions: ['20', '30', '40'], // 每页数量选项
   showTotal: total => `Total ${total}`, // 显示总数
   onChange(page, number) {
     changeRoute(number, page)

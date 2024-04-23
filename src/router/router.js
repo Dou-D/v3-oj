@@ -103,14 +103,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
   // 获取当前登录状态及用户角色
-  const { roles } = storeToRefs(userStore);
+  const { identity } = storeToRefs(userStore);
   // 判断该路由是否需要登录权限
   if (to.meta.auth) {
     // 如果需要，则校验用户是否已经登录
     const token = storage.get("metc_user_token")
     if (token) {
       // 判断当前用户是否有访问该路由的权限
-      if (to.meta.roles.includes(roles.value)) {
+      if (to.meta.roles.includes(identity.value)) {
         next(); // 用户有访问权限，直接进入页面
       } else {
         next("/not"); // 跳转到其他页面

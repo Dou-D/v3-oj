@@ -47,12 +47,12 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
-import { reactive, computed } from 'vue';
+import { reactive, computed, ref } from 'vue';
 import { getLoginAPI } from '@/services/user.js'
 // primevue toast
 import { useToast } from 'primevue/usetoast';
 import { useUserStore } from '@/stores/user'
-import { ref } from 'vue';
+import storage from '@/services/storage';
 const toast = useToast();
 
 const formState = reactive({
@@ -78,9 +78,9 @@ const handleLogin = async () => {
         toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
         return
     }
+    storage.set("identity", res.data.data.Authority.identity)
+    storage.set("menu", res.data.data.Authority.menu)
     toast.add({ severity: 'success', summary: res.data.msg, life: 3000 });
-    const userStore = useUserStore();
-    userStore.menu.push(...res.data.data.menu)
     const router = useRouter();
     router.replace('/')
 }

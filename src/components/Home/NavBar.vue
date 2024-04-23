@@ -53,7 +53,8 @@ const navigate = (path) => {
 
 const menu = ref([])
 const userStore = useUserStore()
-menu.value = userStore.menu
+console.log(userStore.identity, "user Menu");
+menu.value = userStore.userPermissions || []
 // 下拉菜单
 const handleButtonClick = e => {
     console.log('click left button', e);

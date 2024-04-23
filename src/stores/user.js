@@ -1,25 +1,16 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-
+import storage from "@/services/storage";
 export const useUserStore = defineStore("user", () => {
   // 角色
-  const roles = ref('admin')
+
+  const identity = ref(storage.get("identity"))
 
   // 权限
-  const userPermissions = ref([])
-
-  //是否登录
-  const isLogin = ref(false)
-
-  // 设置状态（传入的权限信息赋值给该状态）
-  const setUserPermissions = (params) => {
-    userPermissions.value = params
-  }
+  const userPermissions = ref(storage.get('menu'))
 
   return {
-    isLogin,
+    identity,
     userPermissions,
-    roles,
-    setUserPermissions
   }
 });
