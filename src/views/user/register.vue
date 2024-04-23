@@ -80,6 +80,8 @@ const formState = reactive({
     email: '',
     verify_code: '',
 });
+const router = useRouter();
+
 function handleGetRegistration() {
     const res = getRegisterAPI(formState)
     if (res.data.code != 200) {
@@ -91,7 +93,6 @@ function handleGetRegistration() {
     formState.password = '';
     formState.email = '';
     formState.verify_code = '';
-    const router = useRouter();
     router.replace('/')
 }
 const countdown = ref(0);
