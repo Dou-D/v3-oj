@@ -2,15 +2,23 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import storage from "@/services/storage";
 export const useUserStore = defineStore("user", () => {
-  // 角色
-
-  const identity = ref(storage.get("identity"))
-
-  // 权限
-  const userPermissions = ref(storage.get('menu'))
-
+  const menu = ref([])
+  menu.value.push({
+    id: 1,
+    title: "题目管理",
+    path: "/console/problem"
+  },
+  {
+    id: 2,
+    title: "用户管理",
+    path: "/console/user"
+  },
+  {
+    id: 3,
+    title: "添加题目",
+    path: "/console/addproblem"
+  })
   return {
-    identity,
-    userPermissions,
+    menu
   }
 });
