@@ -20,12 +20,14 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { MailOutlined, UserOutlined, BookOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { fetchProblemList } from '@/services/problem'
 // 示例数据，实际项目中应从后端获取
 import { useToast } from 'primevue/usetoast';
 import { useRoute, useRouter } from 'vue-router'
+import EventBus from '@/utils/eventBus'
+
 const toast = useToast();
 const dataSource = ref([
   {
@@ -120,4 +122,12 @@ const ProblemListAPI = async (page, number) => {
   }
   dataSource.value = res.data.data.question_list
 }
+
+EventBus.on("searchProblem", (val) => {
+  console.log(val, "searchProblem");
+})
+onUnmounted(() => {
+  EventBus.off("searchProblem")
+  console.log(1111);
+})
 </script>

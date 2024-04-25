@@ -3,6 +3,7 @@
         <a-layout-header :style="headerStyle">
             <NavBar :items="items" />
         </a-layout-header>
+        
         <a-layout>
             <a-layout-content :style="contentStyle">
                 <RouterView />

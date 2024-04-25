@@ -31,12 +31,15 @@ import { RouterLink, useRouter } from 'vue-router';
 import { ref } from 'vue';
 import storage from '@/services/storage';
 import { useUserStore } from '@/stores/user'
+import EventBus from '@/utils/eventBus';
 const current = ref(['home']);
+const router = useRouter();
 
 // 搜索框
 const value = ref('');
 const onSearch = (val) => {
-    console.log(val);
+    EventBus.emit("searchProblem", val)
+    router.push('problems')
 }
 
 const props = defineProps({
@@ -45,7 +48,6 @@ const props = defineProps({
         default: () => [],
     },
 })
-const router = useRouter();
 const items = props['items']
 const navigate = (path) => {
     router.push(path);

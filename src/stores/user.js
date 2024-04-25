@@ -18,7 +18,9 @@ export const useUserStore = defineStore("user", () => {
     title: "添加题目",
     path: "/console/addproblem"
   })
+  const identity = ref('admin')
   return {
-    menu
+    menu,
+    identity
   }
 });
