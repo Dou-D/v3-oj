@@ -1,6 +1,7 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import storage from "@/services/storage";
+import { getUserInfoAPI } from "@/services/user";
+
 export const useUserStore = defineStore("user", () => {
   const menu = ref([])
   menu.value.push({
@@ -19,8 +20,18 @@ export const useUserStore = defineStore("user", () => {
     path: "/console/addproblem"
   })
   const identity = ref('admin')
+  // 更新用户、菜单信息
+  async function updateUserInfo() {
+    const res = await getUserInfoAPI()
+      if(res.data.code !== 200) {
+        throw new Error(res.data.message)
+      }
+      menu.value.push(...res.data.data.menu)
+      identity.value = res.data.data.identity
+  }
   return {
     menu,
-    identity
+    identity,
+    updateUserInfo
   }
 });

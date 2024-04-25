@@ -36,31 +36,6 @@ const router = createRouter({
               component: () => import("@/views/problem/problem.vue"),
             },
             // 用户
-            // 后台管理
-            {
-              path: "/console",
-              redirect: "/console/problems",
-              meta: { auth: true, roles: ["admin"] },
-              component: () => import("@/views/admin/index.vue"),
-              children: [
-                // 添加题目
-                {
-                  path: "/console/addproblem",
-                  meta: { auth: true, roles: ["admin"] },
-                  component: () => import("@/views/admin/addproblem.vue"),
-                },
-                {
-                  path: "/console/problems",
-                  meta: { auth: true, roles: ["admin"] },
-                  component: () => import("@/views/admin/problems.vue"),
-                },
-                {
-                  path: "/console/users",
-                  meta: { auth: true, roles: ["admin"] },
-                  component: () => import("@/views/admin/users.vue"),
-                },
-              ],
-            },
           ],
         },
       ],
@@ -70,7 +45,7 @@ const router = createRouter({
       name: "user",
       meta: {
         auth: true,
-        roles: ["admin", "guest"]
+        roles: ["admin", "guest"],
       },
       component: () => import("@/views/user/index.vue"),
       children: [
@@ -94,14 +69,45 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
   // 获取当前登录状态及用户角色
-  const { identity } = storeToRefs(userStore);
+  const { identity, menu } = storeToRefs(userStore);
+  if (!identity || !menu) {
+    await userStore.updateUserInfo();
+  }
+  // 判断用户是否为管理员
+  if (identity.value === "admin" && !router.hasRoute("console")) {
+    router.addRoute("index", {
+      path: "/console",
+      redirect: "/console/problems",
+      name: "console",
+      meta: { auth: true, roles: ["admin"] },
+      component: () => import("@/views/admin/index.vue"),
+      children: [
+        // 添加题目
+        {
+          path: "/console/addproblem",
+          meta: { auth: true, roles: ["admin"] },
+          component: () => import("@/views/admin/addproblem.vue"),
+        },
+        {
+          path: "/console/problems",
+          meta: { auth: true, roles: ["admin"] },
+          component: () => import("@/views/admin/problems.vue"),
+        },
+        {
+          path: "/console/users",
+          meta: { auth: true, roles: ["admin"] },
+          component: () => import("@/views/admin/users.vue"),
+        },
+      ],
+    });
+  }
   // 判断该路由是否需要登录权限
   if (to.meta.auth) {
     // 如果需要，则校验用户是否已经登录
-    const token = storage.get("metc_user_token")
+    const token = storage.get(storage.USER_TOKEN);
     if (token) {
       // 判断当前用户是否有访问该路由的权限
       if (to.meta.roles.includes(identity.value)) {

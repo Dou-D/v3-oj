@@ -24,8 +24,8 @@
 
                 <a-form-item>
                     <a-flex :justify="'center'" :align="center">
-                        <a-checkbox v-model:checked="formState.remember">Remember me</a-checkbox>
-                        <a class="login-form-forgot" href="">Forgot password</a>
+                        <a-checkbox v-model:checked="formState.remember">记住我</a-checkbox>
+                        <a class="login-form-forgot" href="">忘记密码？</a>
                     </a-flex>
                 </a-form-item>
 
@@ -36,7 +36,7 @@
                     </a-button>
                     Or
                     <RouterLink to="/user/register">
-                        <a-button type="primary">register now!</a-button>
+                        <a-button type="primary">注册</a-button>
                     </RouterLink>
                 </a-form-item>
             </a-form>
@@ -51,7 +51,7 @@ import { reactive, computed, ref } from 'vue';
 import { getLoginAPI } from '@/services/user.js'
 // primevue toast
 import { useToast } from 'primevue/usetoast';
-import { useUserStore } from '@/stores/user'
+
 import storage from '@/services/storage';
 const toast = useToast();
 
@@ -73,13 +73,11 @@ const disabled = computed(() => {
 // 开始登录
 const handleLogin = async () => {
     const res = await getLoginAPI({ username: formState.username, password: formState.password });
-    console.log(res,"res");
     if (res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
         return
     }
-    storage.set("identity", res.data.data.Authority.identity)
-    storage.set("menu", res.data.data.Authority.menu)
+    storage.set(storage.USER_TOKEN, res.data.data.token)
     toast.add({ severity: 'success', summary: res.data.msg, life: 3000 });
     const router = useRouter();
     router.replace('/')
