@@ -103,6 +103,10 @@ router.beforeEach(async (to, from, next) => {
         },
       ],
     });
+    // if (to.path.startsWith('/console')) {
+    //   next({ ...to, replace: true });
+    //   return;
+    // }
   }
   // 判断该路由是否需要登录权限
   if (to.meta.auth) {
