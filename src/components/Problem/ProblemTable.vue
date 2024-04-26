@@ -124,7 +124,7 @@ const ProblemListAPI = async (page, number) => {
 }
 
 EventBus.on("searchProblem", (val) => {
-  console.log(val, "searchProblem");
+  
 })
 onUnmounted(() => {
   EventBus.off("searchProblem")

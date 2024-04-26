@@ -8,9 +8,6 @@
                 @search="onSearch" />
         </a-flex>
         <a-col flex="0 1 300px">
-            <a-avatar style="background-color: #87d068">
-                <UserOutlined />
-            </a-avatar>
             <a-dropdown-button @click="handleButtonClick">
                 dou
                 <template #overlay>
@@ -55,11 +52,9 @@ const navigate = (path) => {
 
 const menu = ref([
     {
-        id: 1,
         title: '个人中心',
         path: '/user',
     }, {
-        id: 2,
         title: '退出登录',
         path: 'logout',
     }
@@ -67,10 +62,7 @@ const menu = ref([
 const userStore = useUserStore()
 menu.value.push(...userStore.menu);
 const handleButtonClick = e => {
-    console.log('click left button', e);
-    if (!storage.get(storage.USER_TOKEN)) {
-        navigate('/user/login')
-    }
+    navigate('/user/login')
 };
 const handleMenuClick = e => {
     if(e.key === 'logout') {

@@ -9,7 +9,7 @@ export const useUserStore = defineStore("user", () => {
   menu.value.push({
     id: 1,
     title: "题目管理",
-    path: "/console/problem"
+    path: "/console/problems"
   },
   {
     id: 2,
