@@ -15,7 +15,7 @@
                 dou
                 <template #overlay>
                     <a-menu @click="handleMenuClick">
-                        <a-menu-item v-for="item in menu" :key="item.title">
+                        <a-menu-item v-for="item in menu" :key="item.path">
                             {{ item.title }}
                         </a-menu-item>
                     </a-menu>
@@ -61,44 +61,27 @@ const menu = ref([
     }, {
         id: 2,
         title: '退出登录',
-        path: '/logout',
+        path: 'logout',
     }
 ])
 const userStore = useUserStore()
 menu.value.push(...userStore.menu);
-// 下拉菜单
 const handleButtonClick = e => {
     console.log('click left button', e);
-    if (!storage.get('sylu_user_token')) {
+    if (!storage.get(storage.USER_TOKEN)) {
         navigate('/user/login')
     }
 };
 const handleMenuClick = e => {
-    switch (e.key) {
-        case '个人中心':
-            router.push('/user')
-            break
-        case '退出登录':
-            storage.remove('sylu_user_token')
-            router.push('/user/login')
-            break
-        case '题目管理':
-            router.push('/console/problems')
-            break
-        case '用户管理':
-            router.push('/console/user')
-            break
-        case '添加题目':
-            router.push('/console/addproblem')
-            break
-        default:
-            router.push('/404')
+    if(e.key === 'logout') {
+        logout();
+        return
     }
+    router.push(e.key);
 };
 // 退出登录
 const logout = () => {
-    storage.remove('sylu_user_token')
-    userStore.logout()
+    storage.remove(storage.USER_TOKEN);
     navigate('/user/login')
 }
 
