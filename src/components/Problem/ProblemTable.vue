@@ -104,7 +104,7 @@ const changeRoute = (number, page) => {
   const query = {
     ...route.query,
     page: page,
-    number: number
+    number: number  
   };
   console.log(route.query,"route");
   router.push({ name: route.name, query })
@@ -124,7 +124,7 @@ const ProblemListAPI = async (page, number) => {
 }
 
 EventBus.on("searchProblem", (val) => {
-  
+  console.log(val);
 })
 onUnmounted(() => {
   EventBus.off("searchProblem")

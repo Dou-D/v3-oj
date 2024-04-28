@@ -50,11 +50,11 @@
                 <a-form-item>
                     <a-button @click="handleGetRegistration" :disabled="disabled" type="primary" html-type="submit"
                         class="login-form-button">
-                        Register
+                        开始注册
                     </a-button>
                     Or
                     <RouterLink to="/user/login">
-                        <a-button type="default">login now!</a-button>
+                        <a-button type="default">登录</a-button>
                     </RouterLink>
                 </a-form-item>
             </a-form>

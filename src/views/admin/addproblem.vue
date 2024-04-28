@@ -26,14 +26,6 @@
 
             <!-- 新增标签按钮 -->
             <a-button @click="showDialog = true">新增标签</a-button>
-            <!-- <div>
-                <label>测试用例</label>
-                <a-input v-model:value="testInput" placeholder="测试用例" />
-            </div>
-            <div>
-                <label>期望输出</label>
-                <a-input v-model:value="expectedOutput" placeholder="期望输出" />
-            </div> -->
             <div>
                 <a-tag v-for="(tag, index) in IOtag" :key="index" closable @close="removeTag(index)">
                     {{ tag }}
@@ -84,36 +76,8 @@ const toast = useToast();
 const title = ref('');
 const content = ref('');
 const difficulty = ref();
-const testInput = ref('');
-const expectedOutput = ref('');
-// const submitQuestion = () => {
-//     console.log('Title:', title.value);
-//     console.log('Content:', content.value);
-//     console.log('Difficulty:', Number(difficulty.value));
-//     console.log('Tags:', tags.value[0]);
-//     // 实际应用中，在这里可以处理数据提交到后端的逻辑
-// };
-const submitQuestion = async () => {
-    if (!title.value.trim() || !content.value.trim() || !difficulty.value || !testInput.value.trim() || !expectedOutput.value.trim()) {
-        alert('确保输入全部内容');
-        return;
-    }
-    const res = await fetchUploadQuestion({
-        title: title.value,
-        content: content.value,
-        tag: tags.value,
-        degree: Number(difficulty.value),
-        input_test: testInput.value,
-        expected_output: expectedOutput.value
-    });
-    if(res.data.code != 200) {
-        toast.add({ severity: 'error', summary: res.data.msg });
-        return
-    }
-    toast.add({ severity:'success', summary: res.data.msg });
-};
 
-// io tag
+// io tag --输入输出
 const IOtag = ref([])
 const showIODialog = ref(false)
 const input = ref('')
@@ -129,7 +93,6 @@ const addIOTag = () => {
         showIODialog.value = false
     }
 }
-
 
 // 题目tag逻辑
 const tags = ref([]);
@@ -147,9 +110,33 @@ const addTag = () => {
 const removeTag = (index) => {
     tags.value.splice(index, 1);
 };
+
+
+const submitQuestion = async () => {
+    if (!title.value || !content.value || !difficulty.value || !IOtag.value || !tags.value) {
+        console.log("title:", title.value);
+        console.log("content:", content.value);
+        console.log("difficulty:", difficulty.value);
+        console.log("IOtag:", IOtag.value);
+        console.log("tags:", tags.value);
+    }
+    const res = await fetchUploadQuestion({
+        title: title.value,
+        content: content.value,
+        tag: tags.value,
+        degree: Number(difficulty.value),
+        input_test: testInput.value,
+        expected_output: expectedOutput.value
+    });
+    if(res.data.code != 200) {
+        toast.add({ severity: 'error', summary: res.data.msg });
+        return
+    }
+    toast.add({ severity:'success', summary: res.data.msg });
+};
 </script>
 
-<style>
+<style scoped>
 .upload-container {
     max-width: 800px;
     margin: 40px auto;

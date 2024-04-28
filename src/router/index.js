@@ -50,11 +50,17 @@ const routes = [
       {
         path: "/user/login",
         name: "login",
+        meta: {
+          auth: false,
+        },
         component: () => import("@/views/user/login.vue"),
       },
       {
         path: "/user/register",
         name: "register",
+        meta: {
+          auth: false,
+        },
         component: () => import("@/views/user/register.vue"),
       },
     ],
@@ -76,7 +82,7 @@ router.beforeEach(async (to, from, next) => {
   //   await userStore.updateUserInfo();
   // }
   // if (userStore.identity === "admin" && !userStore.adminRoutesAdded) {
-    userStore.addAdminRoutes(); // 传递 router 实例
+    // userStore.addAdminRoutes(); // 传递 router 实例
   // }
   if (to.meta.auth) {
     const token = storage.get(storage.USER_TOKEN);
@@ -90,7 +96,7 @@ router.beforeEach(async (to, from, next) => {
         next("/404");
       }
     } else {
-      next("/login");
+      next("/user/login");
     }
   } else {
     next();
