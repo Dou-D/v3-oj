@@ -79,5 +79,3 @@ const footerStyle = {
     backgroundColor: '#7dbcea',
 };
 </script>
-
-<style></style>

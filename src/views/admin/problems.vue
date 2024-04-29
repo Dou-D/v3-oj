@@ -28,25 +28,25 @@
   import { ref } from 'vue';
   import { MailOutlined, UserOutlined, BookOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
   
-  const dataSource = ref([
-    {
-      "id": 0,
-      "title": "Example Question",
-      "tag": ["Array", "String"],
-      "degree": 3,
-      "passing_rate": 67
-    }
-    // 添加更多题目
-  ]);
-  for (let i = 0; i < 20; i++) {
-    dataSource.value.push({
-      "id": i,
-      "title": "Example Question",
-      "tag": ["Array", "String"],
-      "degree": 3,
-      "passing_rate": 67
-    })
-  }
+  // const dataSource = ref([
+  //   {
+  //     "id": 0,
+  //     "title": "Example Question",
+  //     "tag": ["Array", "String"],
+  //     "degree": 3,
+  //     "passing_rate": 67
+  //   }
+  //   // 添加更多题目
+  // ]);
+  // for (let i = 0; i < 20; i++) {
+  //   dataSource.value.push({
+  //     "id": i,
+  //     "title": "Example Question",
+  //     "tag": ["Array", "String"],
+  //     "degree": 3,
+  //     "passing_rate": 67
+  //   })
+  // }
   const columns = [
     {
       title: '题号',

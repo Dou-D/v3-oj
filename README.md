@@ -27,3 +27,14 @@ npm run dev
 ```sh
 npm run build
 ```
+
+store中导出的ref，不需要再通过`.value`来访问  
+```js
+Router.addRoute(parentName: RouteRecordName, route: RouteRecordRaw): () => void (+1 overload)
+```
+解释： Add a new route record as the child of an existing route.  
+```
+@param parentName — Parent Route Record where route should be appended at
+
+@param route — Route Record to add
+```

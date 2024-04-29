@@ -78,12 +78,12 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
-  // if (!userStore.identity || !userStore.menu.length) {
-  //   await userStore.updateUserInfo();
-  // }
-  // if (userStore.identity === "admin" && !userStore.adminRoutesAdded) {
-    // userStore.addAdminRoutes(); // 传递 router 实例
-  // }
+  if (!userStore.identity || !userStore.menu.length) {
+    await userStore.updateUserInfo();
+  }
+  if (userStore.identity === "admin" && !userStore.adminRoutesAdded) {
+    userStore.addAdminRoutes(); // 传递 router 实例
+  }
   if (to.meta.auth) {
     const token = storage.get(storage.USER_TOKEN);
     if (token) {

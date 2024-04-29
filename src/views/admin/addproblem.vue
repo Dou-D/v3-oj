@@ -120,13 +120,13 @@ const submitQuestion = async () => {
         console.log("IOtag:", IOtag.value);
         console.log("tags:", tags.value);
     }
+    console.log(content.value,"content");
     const res = await fetchUploadQuestion({
         title: title.value,
         content: content.value,
         tag: tags.value,
         degree: Number(difficulty.value),
-        input_test: testInput.value,
-        expected_output: expectedOutput.value
+        io: IOtag.value,
     });
     if(res.data.code != 200) {
         toast.add({ severity: 'error', summary: res.data.msg });

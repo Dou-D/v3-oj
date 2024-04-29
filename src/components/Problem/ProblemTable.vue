@@ -29,25 +29,26 @@ import { useRoute, useRouter } from 'vue-router'
 import EventBus from '@/utils/eventBus'
 
 const toast = useToast();
-const dataSource = ref([
-  {
-    "id": 0,
-    "title": "Example Question",
-    "tag": ["Array", "String"],
-    "degree": 3,
-    "passing_rate": 67
-  }
-  // 添加更多题目
-]);
-for (let i = 0; i < 20; i++) {
-  dataSource.value.push({
-    "id": i,
-    "title": "Example Question",
-    "tag": ["Array", "String"],
-    "degree": 3,
-    "passing_rate": 67
-  })
-}
+const dataSource = ref([])
+// const dataSource = ref([
+//   {
+//     "id": 0,
+//     "title": "Example Question",
+//     "tag": ["Array", "String"],
+//     "degree": 3,
+//     "passing_rate": 67
+//   }
+//   // 添加更多题目
+// ]);
+// for (let i = 0; i < 20; i++) {
+//   dataSource.value.push({
+//     "id": i,
+//     "title": "Example Question",
+//     "tag": ["Array", "String"],
+//     "degree": 3,
+//     "passing_rate": 67
+//   })
+// }
 const columns = [
   {
     title: '题号',
@@ -89,7 +90,6 @@ const pagination = {
     changeRoute(number, page)
   }
 }
-const router = useRouter();
 const route = useRoute();
 onMounted(() => {
   changeRoute(pagination.page, pagination.number)
@@ -106,9 +106,9 @@ const changeRoute = (number, page) => {
     page: page,
     number: number  
   };
-  console.log(route.query,"route");
-  router.push({ name: route.name, query })
-  ProblemListAPI(route.query.page, route.query.number)
+  console.log(query,"route");
+  // router.push({ name: route.name, query })
+  ProblemListAPI(query.page, query.number)
 }
 
 /**
@@ -116,11 +116,11 @@ const changeRoute = (number, page) => {
  */
 const ProblemListAPI = async (page, number) => {
   const res = await fetchProblemList({ page, number });
-  if (res.data.code != 0) {
+  if (res.data.code != 200) {
     toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
     return
   }
-  dataSource.value = res.data.data.question_list
+  dataSource.value.push(...res.data.data.question_list)
 }
 
 EventBus.on("searchProblem", (val) => {
@@ -128,6 +128,5 @@ EventBus.on("searchProblem", (val) => {
 })
 onUnmounted(() => {
   EventBus.off("searchProblem")
-  console.log(1111);
 })
 </script>

@@ -10,10 +10,11 @@ export function getRegisterAPI(data) {
   return request.post("/user/register", data);
 }
 
-export function getVerificationCodeAPI() {
-  return request.get("/utils/email_verify");
+export function getVerificationCodeAPI(email) {
+  console.log("email: " + email);
+  return request.get("/utils/email_verify", {params: {email}});
 }
 
-export function getUserInfoAPI(token) {
-  return request.post("/user/userinfo",token);
+export function getUserInfoAPI() {
+  return request.get('/user/userinfo');
 }

@@ -2,7 +2,7 @@
   <Toast />
   <a-row gutter="{16}">
     <a-col :span="12">
-      <a-card title="题目信息">
+      <a-card :title="title">
         <a-tag color="blue" v-for="item in tags">{{ item }}</a-tag>
         <!-- 假设题目信息是HTML格式，使用v-html渲染 -->
         <div v-html="questionInfo"></div>
@@ -109,9 +109,8 @@ import MonacoEditor from "@/components/Problem/MonacoEditor.vue";
 // 模拟题目信息，实际应用中应由后端提供
  * 
  */
-const questionInfo = ref(
-  `<p>这里是题目描述...</p><p>请编写代码完成任务...</p>`
-);
+const questionInfo = ref();
+const title = ref();
 /**
  * 获取题目ID
  */
@@ -128,7 +127,8 @@ onMounted(async () => {
     toast.add({ severity: "error", summary: res.data.msg });
     return;
   }
-  questionInfo.value = res.data.data.problem.description;
+  questionInfo.value = res.data.data.question_msg.content;
+  title.value = res.data.data.question_msg.title;
 });
 /**
  * 上传答案
