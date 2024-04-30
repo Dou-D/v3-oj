@@ -30,25 +30,6 @@ import EventBus from '@/utils/eventBus'
 
 const toast = useToast();
 const dataSource = ref()
-// const dataSource = ref([
-//   {
-//     "id": 0,
-//     "title": "Example Question",
-//     "tag": ["Array", "String"],
-//     "degree": 3,
-//     "passing_rate": 67
-//   }
-//   // 添加更多题目
-// ]);
-// for (let i = 0; i < 20; i++) {
-//   dataSource.value.push({
-//     "id": i,
-//     "title": "Example Question",
-//     "tag": ["Array", "String"],
-//     "degree": 3,
-//     "passing_rate": 67
-//   })
-// }
 const columns = [
   {
     title: '题号',
@@ -106,8 +87,6 @@ const changeRoute = (number, page) => {
     page: page,
     number: number  
   };
-  console.log(query,"route");
-  // router.push({ name: route.name, query })
   ProblemListAPI(query.page, query.number)
 }
 
@@ -122,11 +101,4 @@ const ProblemListAPI = async (page, number) => {
   }
   dataSource.value = res.data.data.question_list
 }
-
-EventBus.on("searchProblem", (val) => {
-  console.log(val);
-})
-onUnmounted(() => {
-  EventBus.off("searchProblem")
-})
 </script>

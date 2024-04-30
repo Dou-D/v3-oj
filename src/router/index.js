@@ -23,6 +23,7 @@ const routes = [
           {
             path: "/problems",
             name: "problems",
+            roles: ["admin", "guest"],
             component: () => import("@/views/problem/index.vue"),
           },
           {
@@ -33,6 +34,15 @@ const routes = [
               roles: ["admin", "guest"],
             },
             component: () => import("@/views/problem/problem.vue"),
+          },
+          {
+            path: "/create",
+            name: "create",
+            meta: {
+              auth: true,
+              roles: ["admin", "guest"],
+            },
+            component: () => import("@/views/admin/create.vue"),
           },
         ],
       },
@@ -73,23 +83,24 @@ const routes = [
 ];
 const router = createRouter({
   history: createWebHistory(),
-  routes: routes
+  routes: routes,
 });
 
 router.beforeEach(async (to, from, next) => {
-const userStore = useUserStore();
-
-  if (!userStore.identity || userStore.menu.length === 0) {
-    await userStore.updateUserInfo();
-  }
-  if (userStore.identity === "admin" && !userStore.adminRoutesAdded) {
-    userStore.addAdminRoutes(); // 传递 router 实例
-  }
+  const userStore = useUserStore();
   if (to.meta.auth) {
     const token = storage.get(storage.USER_TOKEN);
     if (token) {
-      if(to.path === '/user/login') {
-        return next('/')
+      if (to.path === "/user/login") {
+        return next("/");
+      }
+      // 用户身份
+      if (!userStore.identity || userStore.menu.length === 0) {
+        await userStore.updateUserInfo();
+      }
+      // 权限路由
+      if (userStore.identity === "admin" && !userStore.adminRoutesAdded) {
+        userStore.addAdminRoutes(); // 传递 router 实例
       }
       if (to.meta.roles.includes(userStore.identity)) {
         return next();

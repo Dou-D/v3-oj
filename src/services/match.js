@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 
 /**
- * 
+ *
  * @param {Array} students 有哪些学生参与本次比赛
  * @param {String} name 本次比赛名称
  * @returns Promise
@@ -19,4 +19,8 @@ export function GetAddExamAPI(students, name) {
   );
 }
 
-
+export function GetAddQuestionAPI(id) {
+  return request.post("/exam/add_question", id, {
+    headers: { "Content-Type": "application/json" },
+  });
+}

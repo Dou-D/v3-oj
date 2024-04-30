@@ -56,16 +56,17 @@ const menu = ref([
         path: '/user',
     }, {
         title: '退出登录',
-        path: 'logout',
+        path: '/logout',
     }
 ])
 const userStore = useUserStore()
-menu.value.push(...userStore.menu);
+console.log(userStore.menu, "menu")
+menu.value.push(userStore.menu);
 const handleButtonClick = e => {
     navigate('/user/login')
 };
 const handleMenuClick = e => {
-    if(e.key === 'logout') {
+    if(e.key === '/logout') {
         logout();
         return
     }
