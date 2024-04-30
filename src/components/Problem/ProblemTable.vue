@@ -29,7 +29,7 @@ import { useRoute, useRouter } from 'vue-router'
 import EventBus from '@/utils/eventBus'
 
 const toast = useToast();
-const dataSource = ref([])
+const dataSource = ref()
 // const dataSource = ref([
 //   {
 //     "id": 0,
@@ -120,7 +120,7 @@ const ProblemListAPI = async (page, number) => {
     toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
     return
   }
-  dataSource.value.push(...res.data.data.question_list)
+  dataSource.value = res.data.data.question_list
 }
 
 EventBus.on("searchProblem", (val) => {

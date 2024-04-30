@@ -29,7 +29,7 @@ import { ref } from 'vue';
 import storage from '@/services/storage';
 import { useUserStore } from '@/stores/user'
 import EventBus from '@/utils/eventBus';
-const current = ref(['home']);
+const current = ref(['1']);
 const router = useRouter();
 
 // 搜索框

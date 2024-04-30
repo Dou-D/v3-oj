@@ -32,7 +32,11 @@
           </a-col>
         </a-row>
         <a-divider />
-        <MonacoEditor :theme="theme" :language="language" @codeUpdate="handleCodeUpdate" />
+        <MonacoEditor
+          :theme="theme"
+          :language="language"
+          @codeUpdate="handleCodeUpdate"
+        />
       </a-card>
       <a-card title="输出信息">
         <!-- 输出信息和测试结果 -->
@@ -114,21 +118,21 @@ const title = ref();
 /**
  * 获取题目ID
  */
- const route = useRoute();
+const route = useRoute();
 
 function getProblemId() {
   const { id } = route.query;
   return id;
 }
-const tags = ref(['blue', 'yellow', 'green', 'yellow'])
+const tags = ref(["blue", "yellow", "green", "yellow"]);
 onMounted(async () => {
   const id = getProblemId();
   const res = await fetchProblemDetail(String(id));
   if (res.data.code != 200) {
-    toast.add({ severity: "error", summary: res.data.msg });
+    toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
     return;
   }
-  tags.value = res.data.data.tag
+  tags.value = res.data.data.tag;
   questionInfo.value = res.data.data.question_msg.content;
   title.value = res.data.data.question_msg.title;
 });
@@ -137,16 +141,17 @@ onMounted(async () => {
  */
 const answer = ref("");
 function handleCodeUpdate(newCode) {
+  console.log(newCode, "newCode");
   answer.value = newCode;
 }
 const uploadAnswer = async () => {
   const id = Number(getProblemId());
-  console.log(answer.value,"uploadAnswer");
-  const res = await fetchUploadAnswer( id, answer.value );
-  if (res.data.code != 200) {
-    toast.add({ severity: "error", summary: res.data.msg });
-    return;
-  }
+  console.log(answer.value, "uploadAnswer");
+  const res = await fetchUploadAnswer(id, answer.value);
+  if (res.data.data.result === "Accepted")
+    toast.add({ severity: "info", summary: res.data.data.result, life: 3000 });
+  else
+    toast.add({ severity: "error", summary: res.data.data.result, life: 3000 });
   output.value = res.data.data.result;
 };
 // 模拟输出信息，实际应用中应由后端提供

@@ -37,7 +37,7 @@
                 <div class="p-fluid">
                     <div class="p-field">
                         <label for="tag-name">输入</label>
-                        <a-input v-model:value="input" placeholder="输入" />
+                        <a-textarea v-model:value="input" placeholder="输入" auto-size />
                     </div>
                     <div class="p-field">
                         <label for="tag-name">输出</label>
@@ -129,10 +129,10 @@ const submitQuestion = async () => {
         io: IOtag.value,
     });
     if(res.data.code != 200) {
-        toast.add({ severity: 'error', summary: res.data.msg });
+        toast.add({ severity: 'error', summary: res.data.msg,life: 3000 });
         return
     }
-    toast.add({ severity:'success', summary: res.data.msg });
+    toast.add({ severity:'success', summary: res.data.msg, life: 3000 });
 };
 </script>
 
