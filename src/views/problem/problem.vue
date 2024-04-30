@@ -32,7 +32,7 @@
           </a-col>
         </a-row>
         <a-divider />
-        <MonacoEditor :theme="theme" :language="language" />
+        <MonacoEditor :theme="theme" :language="language" @codeUpdate="handleCodeUpdate" />
       </a-card>
       <a-card title="输出信息">
         <!-- 输出信息和测试结果 -->
@@ -114,8 +114,9 @@ const title = ref();
 /**
  * 获取题目ID
  */
+ const route = useRoute();
+
 function getProblemId() {
-  const route = useRoute();
   const { id } = route.query;
   return id;
 }
@@ -127,16 +128,21 @@ onMounted(async () => {
     toast.add({ severity: "error", summary: res.data.msg });
     return;
   }
+  tags.value = res.data.data.tag
   questionInfo.value = res.data.data.question_msg.content;
   title.value = res.data.data.question_msg.title;
 });
 /**
  * 上传答案
  */
-const code = ref("");
+const answer = ref("");
+function handleCodeUpdate(newCode) {
+  answer.value = newCode;
+}
 const uploadAnswer = async () => {
   const id = Number(getProblemId());
-  const res = await fetchUploadAnswer({ id, answer: code.value });
+  console.log(answer.value,"uploadAnswer");
+  const res = await fetchUploadAnswer( id, answer.value );
   if (res.data.code != 200) {
     toast.add({ severity: "error", summary: res.data.msg });
     return;

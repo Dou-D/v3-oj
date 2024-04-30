@@ -37,7 +37,7 @@ export function fetchProblemDetail(problemId) {
  * @param {number} id
  * @returns
  */
-export function fetchUploadAnswer(answer, id) {
+export function fetchUploadAnswer(id, answer) {
   return request.post("/question/commit_answer", { answer, id });
 }
 
