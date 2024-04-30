@@ -43,6 +43,12 @@ const items = ref([
         // 添加 onClick 属性进行导航
         onClick: () => navigate('/record'),
     },
+    {
+        key: 'create',
+        icon: () => h(UserOutlined),
+        label: '创建比赛',
+        onClick: () => navigate('/create'),
+    }
 ]);
 
 /**

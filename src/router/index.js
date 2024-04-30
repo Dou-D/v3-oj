@@ -77,8 +77,9 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const userStore = useUserStore();
-  if (!userStore.identity || !userStore.menu.length) {
+const userStore = useUserStore();
+
+  if (!userStore.identity || userStore.menu.length === 0) {
     await userStore.updateUserInfo();
   }
   if (userStore.identity === "admin" && !userStore.adminRoutesAdded) {
@@ -88,18 +89,18 @@ router.beforeEach(async (to, from, next) => {
     const token = storage.get(storage.USER_TOKEN);
     if (token) {
       if(to.path === '/user/login') {
-        next('/')
+        return next('/')
       }
       if (to.meta.roles.includes(userStore.identity)) {
-        next();
+        return next();
       } else {
-        next("/404");
+        return next("/404");
       }
     } else {
-      next("/user/login");
+      return next("/user/login");
     }
   } else {
-    next();
+    return next();
   }
 });
 

@@ -71,6 +71,7 @@ const disabled = computed(() => {
 });
 
 // 开始登录
+const router = useRouter();
 const handleLogin = async () => {
     const res = await getLoginAPI({ username: formState.username, password: formState.password });
     if (res.data.code != 200) {
@@ -79,7 +80,6 @@ const handleLogin = async () => {
     }
     storage.set(storage.USER_TOKEN, res.data.data.token)
     toast.add({ severity: 'success', summary: res.data.msg, life: 3000 });
-    const router = useRouter();
     router.replace('/')
 }
 </script>
