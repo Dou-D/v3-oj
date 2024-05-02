@@ -2,8 +2,8 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { getUserInfoAPI } from "@/services/user";
 import { useRouter } from "vue-router";
-
 export const useUserStore = defineStore("user", () => {
+
   const menu = ref([]);
   // menu.value.push({
   //   id: 1,
@@ -24,8 +24,9 @@ export const useUserStore = defineStore("user", () => {
   const adminRoutesAdded = ref(false);
   const updateUserInfo = async () => {
     const res = await getUserInfoAPI();
-    menu.value.push(...res.data.data.menu)
+    menu.value = res.data.data.menu
     identity.value = res.data.data.identity;
+
   };
   const router = useRouter();
 

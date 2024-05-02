@@ -1,5 +1,5 @@
 <template>
-  <!-- <a-table :columns="columns" :dataSource="dataSource" :pagination="false">
+  <a-table :columns="columns" :dataSource="dataSource" :pagination="false">
     <template #bodyCell="{ record, column }">
       <template v-if="column.dataIndex === 'tag'">
         <a-tag color="#2db7f5" v-for="tag in record.tag" :key="tag">{{
@@ -21,6 +21,7 @@
           status="active"
         />
       </template>
+      <!-- 操作列 -->
       <template v-else-if="column.dataIndex === 'action'">
         <div>
           <a-button type="primary" @click="editRecord(record.id)"
@@ -32,41 +33,25 @@
         </div>
       </template>
     </template>
-  </a-table> -->
-  <ProblemTable>
-    
-  </ProblemTable>
+  </a-table>
 </template>
 
 <script setup>
-import ProblemTable from "@/components/Problem/ProblemTable.vue";
-import { ref } from "vue";
-import {
-  MailOutlined,
-  UserOutlined,
-  BookOutlined,
-  MenuUnfoldOutlined,
-} from "@ant-design/icons-vue";
+import { ref, onMounted } from "vue";
+import { fetchProblemList } from '@/services/problem'
 
-// const dataSource = ref([
-//   {
-//     "id": 0,
-//     "title": "Example Question",
-//     "tag": ["Array", "String"],
-//     "degree": 3,
-//     "passing_rate": 67
-//   }
-//   // 添加更多题目
-// ]);
-// for (let i = 0; i < 20; i++) {
-//   dataSource.value.push({
-//     "id": i,
-//     "title": "Example Question",
-//     "tag": ["Array", "String"],
-//     "degree": 3,
-//     "passing_rate": 67
-//   })
-// }
+const dataSource = ref([]);
+const ProblemListAPI = async (page, number) => {
+  const res = await fetchProblemList({ page, number });
+  if (res.data.code != 200) {
+    toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
+    return;
+  }
+  dataSource.value = res.data.data.question_list;
+};
+onMounted(() => {
+  ProblemListAPI();
+});
 const columns = [
   {
     title: "题号",
@@ -104,7 +89,7 @@ const columns = [
 function editRecord(id) {
   console.log("Editing record with id:", id);
   // 实现编辑跳转逻辑
-  window.location.href = `/console/problems?id=${id}`;
+  window.location.href = `/console/addproblem?id=${id}`;
 }
 
 function deleteRecord(id) {
