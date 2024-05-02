@@ -96,17 +96,16 @@ router.beforeEach(async (to, from, next) => {
     await userStore.updateUserInfo();
   }
   // 权限路由
-  if (userStore.identity === "admin" && !userStore.adminRoutesAdded) {
-    userStore.addAdminRoutes(); // 传递 router 实例
+  if (!userStore.identity || !userStore.adminRoutesAdded) {
+    await userStore.addAdminRoutes(); // 传递 router 实例
   }
   if (to.meta.auth) {
     const token = storage.get(storage.USER_TOKEN);
-    
     if (token) {
-      if (to.path === "user/login" || to.path === "user/register") {
-        return next("/");
+      if(to.path === '/user/login') {
+        console.log(111);
+        return next('/')
       }
-
       if (to.meta.roles.includes(userStore.identity)) {
         return next();
       } else {

@@ -39,14 +39,14 @@ export const useUserStore = defineStore("user", () => {
         component: () => import("@/views/admin/index.vue"),
         children: [
           {
+            path: "/console/problem",
+            meta: { auth: true, roles: ["admin"] },
+            component: () => import("@/views/admin/problems.vue"),
+          },
+          {
             path: "/console/addproblem",
             meta: { auth: true, roles: ["admin"] },
             component: () => import("@/views/admin/addproblem.vue"),
-          },
-          {
-            path: "/console/problems",
-            meta: { auth: true, roles: ["admin"] },
-            component: () => import("@/views/admin/problems.vue"),
           },
           {
             path: "/console/users",

@@ -7,7 +7,7 @@
     :language="props.language"
     :options="OPTIONS"
     v-model:value="code"
-    @input="handleInput"
+    @change="handleInput"
   />
 </template>
 
