@@ -93,9 +93,10 @@ const handleLogin = async () => {
     toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
     return;
   }
+  toast.add({ severity: "success", summary: res.data.msg, life: 3000 });
+
   storage.set(storage.USER_TOKEN, res.data.data.token);
   router.replace("/");
-  toast.add({ severity: "success", summary: res.data.msg, life: 3000 });
 };
 </script>
 

@@ -23,7 +23,10 @@ const routes = [
           {
             path: "/problems",
             name: "problems",
-            roles: ["admin", "guest"],
+            meta: {
+              auth: true,
+              roles: ["admin", "guest"],
+            },
             component: () => import("@/views/problem/index.vue"),
           },
           {
@@ -88,20 +91,22 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
+  // 用户身份
+  if (!userStore.identity || userStore.menu.length === 0) {
+    await userStore.updateUserInfo();
+  }
+  // 权限路由
+  if (userStore.identity === "admin" && !userStore.adminRoutesAdded) {
+    userStore.addAdminRoutes(); // 传递 router 实例
+  }
   if (to.meta.auth) {
     const token = storage.get(storage.USER_TOKEN);
+    
     if (token) {
-      if (to.path === "/user/login" || to.path === "/user/register") {
+      if (to.path === "user/login" || to.path === "user/register") {
         return next("/");
       }
-      // 用户身份
-      if (!userStore.identity || userStore.menu.length === 0) {
-        await userStore.updateUserInfo();
-      }
-      // 权限路由
-      if (userStore.identity === "admin" && !userStore.adminRoutesAdded) {
-        userStore.addAdminRoutes(); // 传递 router 实例
-      }
+
       if (to.meta.roles.includes(userStore.identity)) {
         return next();
       } else {
