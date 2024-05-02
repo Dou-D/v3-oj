@@ -16,7 +16,7 @@
 import NavBar from '@/components/Home/NavBar.vue';
 import { RouterView, RouterLink, useRouter } from 'vue-router';
 import { h, ref } from 'vue'
-import { MailOutlined, UserOutlined, BookOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
+import { MailTwoTone, ExperimentTwoTone, BookTwoTone, ReconciliationTwoTone } from '@ant-design/icons-vue';
 const router = useRouter();
 const navigate = (path) => {
     router.push(path);
@@ -24,28 +24,28 @@ const navigate = (path) => {
 const items = ref([
     {
         key: 'home',
-        icon: () => h(MailOutlined),
+        icon: () => h(MailTwoTone),
         label: '主页',
         // 移除 href 属性，改用 onClick 进行导航
         onClick: () => navigate('/home'),
     },
     {
         key: 'bank',
-        icon: () => h(BookOutlined),
+        icon: () => h(BookTwoTone),
         label: '题库',
         // 添加 onClick 属性进行导航
         onClick: () => navigate('/problems'),
     },
     {
         key: 'record',
-        icon: () => h(MenuUnfoldOutlined),
+        icon: () => h(ReconciliationTwoTone),
         label: '提交记录',
         // 添加 onClick 属性进行导航
         onClick: () => navigate('/record'),
     },
     {
         key: 'create',
-        icon: () => h(UserOutlined),
+        icon: () => h(ExperimentTwoTone),
         label: '创建比赛',
         onClick: () => navigate('/create'),
     }

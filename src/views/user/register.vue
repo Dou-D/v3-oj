@@ -2,8 +2,7 @@
     <Toast />
     <a-row type="flex" justify="center" align="middle" style="min-height: 100vh;">
         <a-col :span="8" style="text-align: center;">
-            <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
-                @finishFailed="onFinishFailed">
+            <a-form :model="formState" name="normal_login" class="login-form">
                 <!-- Username -->
                 <a-form-item label="Username" name="username"
                     :rules="[{ required: true, message: 'Please input your username!' }]">
@@ -97,12 +96,6 @@ function handleGetRegistration() {
 }
 const countdown = ref(0);
 
-const onFinish = values => {
-    console.log('Success:', values);
-};
-const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-};
 
 // 点击获取验证码
 const handleGetVerificationCode = async () => {
@@ -123,7 +116,7 @@ const handleGetVerificationCode = async () => {
 // 更新disabled计算属性
 const disabled = computed(() => {
     // 检查所有输入框是否非空且邮箱格式是否正确
-    return !(formState.username && formState.password && emailRegex.test(formState.email) && formState.verify_code && countdown.value <= 0);
+    return !(formState.username && formState.password && emailRegex.test(formState.email) && formState.verify_code);
 });
 </script>
 

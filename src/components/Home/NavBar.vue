@@ -60,7 +60,6 @@ const menu = ref([
     }
 ])
 const userStore = useUserStore()
-console.log(userStore.menu, "menu")
 menu.value.push(userStore.menu);
 const handleButtonClick = e => {
     navigate('/user/login')
