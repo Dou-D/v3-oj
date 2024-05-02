@@ -60,12 +60,12 @@ const menu = ref([
     }
 ])
 const userStore = useUserStore()
-menu.value.push(userStore.menu);
+menu.value.push(...userStore.menu);
 const handleButtonClick = e => {
     navigate('/user/login')
 };
 const handleMenuClick = e => {
-    if(e.key === '/logout') {
+    if(e.key == '/logout') {
         logout();
         return
     }

@@ -9,7 +9,7 @@
       </a-card>
     </a-col>
     <a-col :span="12">
-      <a-card title="Monaco Editor" style="height: 100vh">
+      <a-card title="Monaco Editor" style="height: 80vh">
         <a-row>
           <a-col :span="8">
             <Cascader

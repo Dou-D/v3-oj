@@ -92,6 +92,7 @@ const addIOTag = () => {
         output.value = ''
         showIODialog.value = false
     }
+    console.log(IOtag.value, "IODialog");
 }
 
 // 题目tag逻辑
@@ -113,14 +114,13 @@ const removeTag = (index) => {
 
 
 const submitQuestion = async () => {
-    if (!title.value || !content.value || !difficulty.value || !IOtag.value || !tags.value) {
+    if (!title.value && !content.value && !difficulty.value && !IOtag.value && !tags.value) {
         console.log("title:", title.value);
         console.log("content:", content.value);
         console.log("difficulty:", difficulty.value);
         console.log("IOtag:", IOtag.value);
         console.log("tags:", tags.value);
     }
-    console.log(content.value,"content");
     const res = await fetchUploadQuestion({
         title: title.value,
         content: content.value,

@@ -61,7 +61,7 @@ const routes = [
         path: "/user/login",
         name: "login",
         meta: {
-          auth: true,
+          auth: false,
         },
         component: () => import("@/views/user/login.vue"),
       },
@@ -69,7 +69,7 @@ const routes = [
         path: "/user/register",
         name: "register",
         meta: {
-          auth: true,
+          auth: false,
         },
         component: () => import("@/views/user/register.vue"),
       },
@@ -92,7 +92,6 @@ router.beforeEach(async (to, from, next) => {
     const token = storage.get(storage.USER_TOKEN);
     if (token) {
       if (to.path === "/user/login" || to.path === "/user/register") {
-        console.log(11);
         return next("/");
       }
       // 用户身份

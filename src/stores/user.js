@@ -24,8 +24,7 @@ export const useUserStore = defineStore("user", () => {
   const adminRoutesAdded = ref(false);
   const updateUserInfo = async () => {
     const res = await getUserInfoAPI();
-    console.log(res, "response");
-    menu.value = res.data.data.menu;
+    menu.value.push(...res.data.data.menu)
     identity.value = res.data.data.identity;
   };
   const router = useRouter();
