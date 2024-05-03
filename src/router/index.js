@@ -78,11 +78,6 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
-    component: () => import("@/views/NotFound.vue"),
-  },
 ];
 const router = createRouter({
   history: createWebHistory(),
@@ -91,24 +86,21 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
-  await userStore.updateUserInfo();
-  await userStore.addAdminRoutes(); 
-  // 传递 router 实例
   // 用户身份
-  // if (!userStore.identity || userStore.menu.length === 0) {
-  // await userStore.updateUserInfo();
-  // }
+  if (!userStore.identity || userStore.menu.length === 0) {
+    await userStore.updateUserInfo();
+  }
   // 权限路由
-  // if (!userStore.identity || !userStore.adminRoutesAdded) {
-  // await userStore.addAdminRoutes(); // 传递 router 实例
-  // }
+  if (!userStore.identity || !userStore.adminRoutesAdded) {
+    userStore.addAdminRoutes(router); // 传递 router 实例
+    return next(to.fullPath);
+  }
   if (to.meta.auth) {
     const token = storage.get(storage.USER_TOKEN);
     if (token) {
       if (to.path === "/user/login") {
         return next("/");
       }
-
       if (to.meta.roles.includes(userStore.identity)) {
         return next();
       } else {
@@ -118,6 +110,10 @@ router.beforeEach(async (to, from, next) => {
       return next("/user/login");
     }
   } else {
+    // if (!to.redirectedFrom) {
+    //   // 防addRoute造成空白or404
+    //   return next({ ...to, replace: true })
+    // }
     return next();
   }
 });
