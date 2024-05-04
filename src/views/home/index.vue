@@ -16,7 +16,8 @@
 import NavBar from '@/components/Home/NavBar.vue';
 import { RouterView, RouterLink, useRouter } from 'vue-router';
 import { h, ref } from 'vue'
-import { MailTwoTone, ExperimentTwoTone, BookTwoTone, ReconciliationTwoTone } from '@ant-design/icons-vue';
+import EventBus from '@/utils/eventBus'
+import { MailTwoTone, ExperimentTwoTone, BookTwoTone, ReconciliationTwoTone, PlusSquareTwoTone } from '@ant-design/icons-vue';
 const router = useRouter();
 const navigate = (path) => {
     router.push(path);
@@ -44,12 +45,13 @@ const items = ref([
         onClick: () => navigate('/record'),
     },
     {
-        key: 'create',
+        key: 'contest',
         icon: () => h(ExperimentTwoTone),
-        label: '创建比赛',
-        onClick: () => navigate('/create'),
+        label: '比赛',
+        onClick: () => navigate('/contest'),
     }
 ]);
+
 
 /**
  * @headerStyle {object} - Header style

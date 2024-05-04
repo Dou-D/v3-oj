@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 
 /**
- *
+ * 创建实验
  * @param {Array} students 有哪些学生参与本次比赛
  * @param {String} name 本次比赛名称
  * @returns Promise
@@ -19,8 +19,32 @@ export function GetAddExamAPI(students, name) {
   );
 }
 
+/**
+ * 添加题目
+ * @param {Array} id
+ * @returns Promise
+ */
 export function GetAddQuestionAPI(id) {
   return request.post("/exam/add_question", id, {
     headers: { "Content-Type": "application/json" },
   });
+}
+
+/**
+ * 检查进度
+ * @param {number} id
+ * @returns Promise
+ */
+export function GetInspectAPI(id) {
+  return request.post("/exam/inspect", { params: id });
+}
+
+export function GetExamListAPI(page, number) {
+  return request.get(
+    "/exam/list",
+    { params: { page, number } },
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 }

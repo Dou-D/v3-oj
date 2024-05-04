@@ -39,13 +39,13 @@ const routes = [
             component: () => import("@/views/problem/problem.vue"),
           },
           {
-            path: "/create",
+            path: "/contest",
             name: "create",
             meta: {
               auth: true,
               roles: ["admin", "guest"],
             },
-            component: () => import("@/views/admin/create.vue"),
+            component: () => import("@/views/contest/contest.vue"),
           },
         ],
       },
