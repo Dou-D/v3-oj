@@ -69,9 +69,13 @@
 </template> 
 
 <script setup>
-import { ref } from 'vue';
-import { fetchUploadQuestion } from '@/services/problem'
+import { ref, onMounted } from 'vue';
+import { fetchUploadQuestion, fetchProblemDetail } from '@/services/problem'
 import { useToast } from 'primevue/usetoast';
+import { useRoute } from 'vue-router'
+import router from '@/router';
+const route = useRoute()
+
 const toast = useToast();
 const title = ref('');
 const content = ref('');
@@ -134,6 +138,22 @@ const submitQuestion = async () => {
     }
     toast.add({ severity:'success', summary: res.data.msg, life: 3000 });
 };
+
+const queryId = route.query.id
+onMounted(async () => {
+    if(queryId) {
+        const res = await fetchProblemDetail(route.query.id)
+        if(res.data.code != 200) {
+            toast.add({ severity: 'error', summary: res.data.msg,life: 3000 });
+            return
+        }
+        console.log(res.data.data.question_msg);
+        title.value = res.data.data.question_msg.title
+        content.value = res.data.data.question_msg.content
+        difficulty.value = res.data.data.question_msg.degree
+        tags.value = res.data.data.question_msg.tag
+    }
+})
 </script>
 
 <style scoped>

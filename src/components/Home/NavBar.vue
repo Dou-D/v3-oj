@@ -36,7 +36,7 @@ const router = useRouter();
 const value = ref('');
 const onSearch = (val) => {
     EventBus.emit("searchProblem", val)
-    router.push('problems')
+    // router.push('problems')
 }
 
 const props = defineProps({

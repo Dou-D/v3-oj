@@ -1,6 +1,6 @@
 <template>
   <Toast />
-  <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination">
+  <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination" :loading="loading">
     <template #bodyCell="{ record, column }">
       <template v-if="column.dataIndex === 'tag'">
         <a-tag color="#2db7f5" v-for="tag in record.tag" :key="tag">{{ tag }}</a-tag>
@@ -30,6 +30,7 @@ import EventBus from '@/utils/eventBus'
 
 const toast = useToast();
 const dataSource = ref()
+const loading = ref(true)
 const columns = [
   {
     title: '题号',
@@ -45,6 +46,16 @@ const columns = [
     title: '标签',
     dataIndex: 'tag',
     width: '10%',
+    filters: [
+      {
+        text: 'DP',
+        value: 'DP',
+      },
+      {
+        text: 'Female',
+        value: 'female',
+      },
+    ],
     // 这里不需要宽度，让它自适应
   },
   {
@@ -81,24 +92,26 @@ onMounted(() => {
  * @param {*} number 
  * @param {*} page 
  */
-const changeRoute = (number, page) => {
-  const query = {
-    ...route.query,
-    page: page,
-    number: number  
-  };
-  ProblemListAPI(query.page, query.number)
+const changeRoute = (number, page, search_title) => {
+  pagination.number = number
+  pagination.page = page
+  ProblemListAPI(page, number, search_title)
 }
 
 /**
  * 获取题目列表
  */
-const ProblemListAPI = async (page, number) => {
-  const res = await fetchProblemList({ page, number });
+const ProblemListAPI = async (page, number,search_title) => {
+  const res = await fetchProblemList({ page, number, search_title });
   if (res.data.code != 200) {
     toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
-    return
+    // return
   }
+  loading.value = false;
   dataSource.value = res.data.data.question_list
 }
+
+EventBus.on('searchProblem', (val) => {
+  changeRoute(pagination.number, pagination.page, val);
+})
 </script>

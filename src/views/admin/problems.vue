@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" :dataSource="dataSource" :pagination="false">
+  <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination" :loading="loading">
     <template #bodyCell="{ record, column }">
       <template v-if="column.dataIndex === 'tag'">
         <a-tag color="#2db7f5" v-for="tag in record.tag" :key="tag">{{
@@ -39,17 +39,35 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { fetchProblemList } from '@/services/problem'
-
+const loading = ref(true)
 const dataSource = ref([]);
+
+const pagination = {
+  page: 20, // 默认每页显示数量
+  number: 1, // 当前页数
+  showSizeChanger: true, // 显示可改变每页数量
+  pageOptions: ['20', '30', '40'], // 每页数量选项
+  showTotal: total => `Total ${total}`, // 显示总数
+  onChange(page, number) {
+    changeRoute(number, page)
+  }
+}
+const changeRoute = (number, page, search_title) => {
+  pagination.number = number
+  pagination.page = page
+  ProblemListAPI(page, number, search_title)
+}
 const ProblemListAPI = async (page, number) => {
   const res = await fetchProblemList({ page, number });
   if (res.data.code != 200) {
     toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
     return;
   }
+  loading.value = false;
   dataSource.value = res.data.data.question_list;
 };
 onMounted(() => {
+  changeRoute(pagination.page, pagination.number)
   ProblemListAPI();
 });
 const columns = [

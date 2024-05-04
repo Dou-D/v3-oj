@@ -7,6 +7,7 @@
     :dataSource="dataSource"
     :pagination="pagination"
     :rowSelection="rowSelection"
+    :loading="loading"
     rowKey="id"
   >
     <template v-slot:bodyCell="{ record, column, index }">
@@ -59,7 +60,7 @@ const route = useRoute();
 const toast = useToast();
 const dataSource = ref();
 const selectedRowKeys = ref([]);
-
+const loading = ref(true)
 const rowSelection = {
   onChange: (newSelectedRowKeys) => {
     selectedRowKeys.value = newSelectedRowKeys;
@@ -133,6 +134,7 @@ const ProblemListAPI = async (page, number) => {
     toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
     return;
   }
+  loading.value = false;
   dataSource.value = res.data.data.question_list;
 };
 // #endregion
