@@ -14,15 +14,15 @@ export default defineConfig({
     }
   },
   build: setupBuild(),
-    server:{
-      proxy:{
-         '/api':{
-             target:"http://101.43.77.156:8080", //跨域地址
-             changeOrigin:true, //支持跨域
-             rewrite:(path) => path.replace(/^\/api/, "")//重写路径,替换/api
-         }
-      }
-   },
+//     server:{
+//       proxy:{
+//          '/api':{
+//              target:"http://101.43.77.156:8080", //跨域地址
+//              changeOrigin:true, //支持跨域
+//              rewrite:(path) => path.replace(/^\/api/, "")//重写路径,替换/api
+//          }
+//       }
+//    },
   optimizeDeps: {
     include: [
       `${prefix}/language/json/json.worker`,
