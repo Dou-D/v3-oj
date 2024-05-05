@@ -9,14 +9,14 @@
     >
       <a-form model="newCompetition">
         <a-form-item label="比赛名称">
-          <a-input v-model="newCompetition.name"></a-input>
+          <a-input v-model:value="newCompetition.name"></a-input>
         </a-form-item>
         <a-form-item label="参与人员">
           <a-select
             mode="multiple"
             style="width: 100%"
             placeholder="Select students"
-            v-model="newCompetition.students"
+            v-model:value="newCompetition.students"
           >
             <a-select-option v-for="student in allStudents" :key="student">{{
               student
@@ -129,6 +129,10 @@ function handleCancel() {
   modalVisible.value = false;
 }
 
+// 详情
+const handleAction = (id) => {
+  router.push({ path: `/contest/detail/${id}` });
+}
 onMounted(() => {
   handleGetExamList(pagination.current, pagination.pageSize);
 });

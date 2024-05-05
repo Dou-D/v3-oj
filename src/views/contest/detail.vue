@@ -1,9 +1,60 @@
 <template>
   <Toast />
-  <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination" :size="small" :loading="loading">
+  <a-space class="flex justify-end">
+    <a-button type="primary" @click="showDetailModal">查看详情</a-button>
+    <a-button @click="showAddQuestionModal">添加题目</a-button>
+
+    <!-- Detail Modal -->
+    <a-modal
+      v-model:open="openDetailModal"
+      title="学生信息"
+      @ok="handleDetailOk"
+    >
+      <a-table
+        :columns="studentColumns"
+        :dataSource="detailData"
+        :pagination="false"
+      >
+        <template #bodyCell="{ record, column }">
+          <template v-if="column.dataIndex === 'id'">
+            {{ record.id }}
+          </template>
+          <template v-else-if="column.dataIndex === 'username'">
+            {{ record.username }}
+          </template>
+          <template v-else-if="column.dataIndex === 'status'">
+            <a-tag :color="record.status === '完成' ? 'green' : 'red'">{{
+              record.status
+            }}</a-tag>
+          </template>
+        </template>
+      </a-table>
+    </a-modal>
+
+    <!-- Add Question Modal -->
+    <a-modal
+      v-model:open="openAddQuestionModal"
+      title="新增题目"
+      @ok="handleAddQuestion"
+    >
+      <a-select
+        v-model:value="newQuestion.options"
+        mode="multiple"
+        style="width: 100%"
+        placeholder="请选择题目选项"
+        :options="selectOptions"
+      ></a-select>
+    </a-modal>
+  </a-space>
+  <a-table
+    :columns="columns"
+    :dataSource="dataSource"
+    :pagination="pagination"
+    :size="small"
+    :loading="loading"
+  >
     <template #bodyCell="{ record, column }">
       <template v-if="column.dataIndex === 'title'">
-        <!-- Uses router-link to navigate to the question detail page -->
         <router-link :to="`/problem?id=${record.id}`">{{
           record.title
         }}</router-link>
@@ -18,56 +69,64 @@
     </template>
   </a-table>
 </template>
+
 <script setup>
+// 引入Vue相关的功能和API请求服务
 import { ref, onMounted } from "vue";
-import { GetExamQuestionAPI } from "@/services/match";
+import {
+  GetExamQuestionAPI,
+  GetInspectAPI,
+  GetAddQuestionAPI,
+} from "@/services/match";
 import { useToast } from "primevue/usetoast";
 import { useRouter, useRoute } from "vue-router";
 
+// 初始化通知（toast）服务和路由
 const toast = useToast();
 const router = useRouter();
 const route = useRoute();
-const dataSource = ref([
+
+// 初始化组件的响应式数据
+const dataSource = ref([]);
+const loading = ref(true);
+const newQuestion = ref({ options: [] });
+const selectOptions = ref([
   {
-    id: 3,
-    title: "第金自手往有",
-    passing_rate: "100"
+    label: 6,
+    value: 6,
   },
   {
-    id: 8,
-    title: "养学目科入此",
-    passing_rate: "60"
+    label: 8,
+    value: 8,
   },
   {
-    id: 22,
-    title: "美清值么战",
-    passing_rate: "3"
+    label: 9,
+    value: 9,
   },
 ]);
-const loading = ref(true);
 
-// Define table columns
+// 定义表格的列配置
 const columns = [
-  { title: "题号", dataIndex: "id", width: "120"},
-  { title: "题目", dataIndex: "title", width: "150"},
+  { title: "题号", dataIndex: "id", width: "120" },
+  { title: "题目", dataIndex: "title", width: "150" },
   { title: "通过率", dataIndex: "passing_rate" },
 ];
 
-// Pagination configuration
+// 分页配置
 const pagination = ref({
-  pageSize: 20, // Number of items per page
-  current: 1, // Current page number
-  total: 0, // Total number of items (to be fetched)
+  pageSize: 20,
+  current: 1,
+  total: 0,
   onChange: (page) => fetchProblemListAPI(page),
 });
 
-// Fetch problems when component is mounted
+// 组件挂载时执行的操作
 onMounted(() => {
-  const id = route.params.id
-  fetchProblemListAPI(id)
+  const id = route.params.id;
+  fetchProblemListAPI(id);
 });
 
-// Fetch list of problems
+// 从后端API获取问题列表的函数
 async function fetchProblemListAPI(id) {
   const res = await GetExamQuestionAPI(id);
   if (res.data.code != 200) {
@@ -75,6 +134,56 @@ async function fetchProblemListAPI(id) {
     return;
   }
   dataSource.value = res.data.data.question_list;
-  loading.value = false
+  loading.value = false;
+}
+
+// 用于控制模态框开关的状态
+const openDetailModal = ref(false);
+const openAddQuestionModal = ref(false);
+
+
+// 显示添加题目模态框的函数
+const showAddQuestionModal = () => {
+  openAddQuestionModal.value = true;
+};
+
+// 处理添加题目请求的函数
+const handleAddQuestion = async () => {
+  const id = parseInt(route.params.id);
+  const res = await GetAddQuestionAPI(newQuestion.value.options, id);
+  if (res.data.code != 200) {
+    toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
+    return;
+  }
+  location.reload();
+  toast.add({ severity: "success", summary: res.data.msg, life: 3000 });
+  openAddQuestionModal.value = false;
+};
+
+// 处理查看详情模态框确定按钮的函数
+const handleDetailOk = () => {
+  openDetailModal.value = false;
+};
+
+// 学生状态
+const studentColumns = [
+  { title: "ID", dataIndex: "id", key: "id" },
+  { title: "用户名", dataIndex: "username", key: "username" },
+  { title: "状态", dataIndex: "status", key: "status" }
+];
+const detailData = ref([]);
+// 显示详情模态框的函数
+const showDetailModal = () => {
+  openDetailModal.value = true;
+  handleInspect()
+};
+const handleInspect = async () => {
+  const id = parseInt(route.params.id)
+  const res = await GetInspectAPI(id)
+  if(res.data.code != 200) {
+    toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
+    return;
+  }
+  detailData.value = res.data.data.student
 }
 </script>

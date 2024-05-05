@@ -24,10 +24,14 @@ export function GetAddExamAPI(students, name) {
  * @param {Array} id
  * @returns Promise
  */
-export function GetAddQuestionAPI(id) {
-  return request.post("/exam/add_question", id, {
-    headers: { "Content-Type": "application/json" },
-  });
+export function GetAddQuestionAPI(id, exam_id) {
+  return request.post(
+    "/exam/add_question",
+    { id, exam_id },
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 }
 
 /**
@@ -36,7 +40,7 @@ export function GetAddQuestionAPI(id) {
  * @returns Promise
  */
 export function GetInspectAPI(id) {
-  return request.post("/exam/inspect", { params: id });
+  return request.get("/exam/inspect", { params: { id: id } });
 }
 
 export function GetExamListAPI(page, number) {
