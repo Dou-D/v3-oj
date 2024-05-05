@@ -48,3 +48,14 @@ export function GetExamListAPI(page, number) {
     }
   );
 }
+
+
+export function GetExamQuestionAPI(id) {
+  return request.get(
+    "/exam/detail",
+    { params: { id } },
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+}

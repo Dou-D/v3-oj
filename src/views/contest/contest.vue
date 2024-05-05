@@ -1,18 +1,17 @@
 <template>
-  <!-- <a-button type="primary" >Add</a-button> -->
-
+  <Toast />
   <div>
     <a-modal
       v-model:visible="modalVisible"
-      title="Add New Competition"
+      title="新增比赛"
       @ok="handleAdd"
       @cancel="handleCancel"
     >
       <a-form model="newCompetition">
-        <a-form-item label="Competition Name">
+        <a-form-item label="比赛名称">
           <a-input v-model="newCompetition.name"></a-input>
         </a-form-item>
-        <a-form-item label="Students">
+        <a-form-item label="参与人员">
           <a-select
             mode="multiple"
             style="width: 100%"
@@ -26,15 +25,31 @@
         </a-form-item>
       </a-form>
     </a-modal>
-    <div>
-      <a-button type="dashed" @click="showModal" v-if="userStore.identity === 'admin'">新增比赛</a-button>
-    </div>
     <a-table
       :dataSource="dataSource"
       :columns="columns"
       :pagination="pagination"
       @change="handleTableChange"
     >
+      <template #title>
+        <a-button
+          class="btn"
+          type="dashed"
+          @click="showModal"
+          v-if="userStore.identity === 'admin'"
+          >新增比赛</a-button
+        >
+      </template>
+      <template #bodyCell="{ record, column }">
+        <template v-if="column.dataIndex === 'name'">
+          <router-link :to="{ path: `/contest/detail/${record.id}` }">{{
+            record.name
+          }}</router-link>
+        </template>
+        <template v-else>
+          {{ record[column.dataIndex] }}
+        </template>
+      </template>
     </a-table>
   </div>
 </template>
@@ -43,80 +58,94 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { GetExamListAPI, GetAddExamAPI } from "@/services/match";
-import { useUserStore } from '@/stores/user'
-const userStore = useUserStore()
-// 使用 Vue Router 的钩子函数来访问路由和路由器实例
+import { useUserStore } from "@/stores/user";
+import { useToast } from "primevue/usetoast";
+
+const toast = useToast();
+const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
-
-// 定义数据源数组，存储比赛列表
-const dataSource = ref([]);
-
-// 加载
+const dataSource = ref([
+  {
+    id: 37,
+    name: "机精确信如质",
+    student_num: 46,
+    question_num: 27,
+  },
+  {
+    id: 69,
+    name: "层民其务切然",
+    student_num: 98,
+    question_num: 15,
+  },
+  {
+    id: 30,
+    name: "己飞式什",
+    student_num: 42,
+    question_num: 53,
+  },
+]);
 const loading = ref(true);
-
-// 控制模态框的显示状态
 const modalVisible = ref(false);
-
-// 定义新比赛的响应式对象，用于模态框表单绑定
 const newCompetition = reactive({ name: "", students: [] });
-
-// 示例学生列表，用于模态框中选择参赛学生
 const allStudents = ref(["Alice", "Bob", "Charlie"]);
 
-// 定义分页信息的响应式对象
 const pagination = reactive({
-  current: 1, // 当前页码
-  pageSize: 10, // 每页显示的记录数
-  total: 0, // 总记录数
+  current: 1,
+  pageSize: 10,
+  total: 0,
 });
 
-// 表格列定义
 const columns = [
   { title: "ID", dataIndex: "id" },
-  { title: "Name", dataIndex: "name" },
-  { title: "Student", dataIndex: "Student" },
-  { title: "Question", dataIndex: "Question" },
+  { title: "比赛名称", dataIndex: "name" },
+  { title: "参与人数", dataIndex: "student_num" },
+  { title: "题目数量", dataIndex: "question_num" },
 ];
 
-//
-const handleGetExamList = async (current, pageSize) => {
-  // 调用API获取比赛列表数据
+async function handleGetExamList(current, pageSize) {
   const res = await GetExamListAPI(current, pageSize);
-};
+  if (res.data.code !== 200) {
+    toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
+  } else {
+    dataSource.value = res.data.data;
+    toast.add({ severity: "success", summary: res.data.msg, life: 3000 });
+  }
+}
 
-// 处理表格分页变化的函数
-const handleTableChange = async (pagination) => {
-  // 调用API获取分页数据
-  const res = await handleGetExamList(pagination.current, pagination.pageSize);
-};
+function handleTableChange(pagination) {
+  handleGetExamList(pagination.current, pagination.pageSize);
+}
 
-// 显示添加新比赛的模态框
-const showModal = () => {
+function showModal() {
   modalVisible.value = true;
-};
+}
 
-// 处理添加新比赛的操作
-const handleAdd = async () => {
-  // 调用后端API添加新比赛，关闭模态框，并清空表单
-  const { data } = await GetAddExamAPI(
-    newCompetition.students,
-    newCompetition.name
-  );
+async function handleAdd() {
+  const res = await GetAddExamAPI(newCompetition.students, newCompetition.name);
+  if (res.data.code !== 200) {
+    toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
+  } else {
+    toast.add({ severity: "success", summary: res.data.msg, life: 3000 });
+    modalVisible.value = false;
+    newCompetition.name = "";
+    newCompetition.students = [];
+    await handleGetExamList(pagination.current, pagination.pageSize);
+  }
+}
+
+function handleCancel() {
   modalVisible.value = false;
-  newCompetition.name = "";
-  newCompetition.students = [];
-  // 刷新表格数据
-  const res = await handleGetExamList(pagination.current, pagination.pageSize);
-};
+}
 
-// 处理取消添加新比赛的操作，关闭模态框
-const handleCancel = () => {
-  modalVisible.value = false;
-};
-
-// 组件挂载时调用，用于首次加载数据
-onMounted(async () => {
-  const res = await handleGetExamList(pagination.current, pagination.pageSize);
+onMounted(() => {
+  handleGetExamList(pagination.current, pagination.pageSize);
 });
 </script>
+
+<style scoped lang="scss">
+.btn {
+  display: flex;
+  justify-self: start;
+}
+</style>

@@ -6,11 +6,11 @@ import request from "@/utils/request";
  * @param {number} number
  * @returns Promise<any>
  */
-export function fetchProblemList({ page, number, search_title }) {
+export function fetchProblemList({ page, number, search_title, search_tag }) {
   return request.get(
     `/question/list`,
     {
-      params: { page: page, number: number, search_title: search_title },
+      params: { page, number, search_title, search_tag },
     },
     {
       headers: { "Content-Type": "application/json" },

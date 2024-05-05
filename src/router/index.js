@@ -39,14 +39,23 @@ const routes = [
             component: () => import("@/views/problem/problem.vue"),
           },
           {
-            path: "/contest",
-            name: "create",
+            path: "/contest/:id?",
+            name: "contest",
             meta: {
               auth: true,
               roles: ["admin", "guest"],
             },
             component: () => import("@/views/contest/contest.vue"),
           },
+          {
+            path: "/contest/detail/:id",
+            name: "contestDetail",
+            meta: {
+              auth: true,
+              roles: ["admin", "guest"],
+            },
+            component: () => import("@/views/contest/detail.vue"),
+          }
         ],
       },
     ],

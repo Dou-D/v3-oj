@@ -63,3 +63,10 @@ if (!to.redirectedFrom) {
 当你对某些路由有重定向功能，例如'/'定向到'/home'，如果此时访问'/'，此时输出的to中，就包含`redirectedFrom`
 >
 <img src="https://pic.imgdb.cn/item/66344b4c0ea9cb14039f4a0e.png" />
+
+## Vue中配置sass无需再装sass-loader
+```bash
+npm install -D sass
+```
+> 一条命令搞定
+>  
