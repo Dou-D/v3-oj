@@ -1,9 +1,8 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-
+import "@/assets/styles/main.css"
 import App from "./App.vue";
 import router from "@/router";
-
 import { install as VueMonacoEditorPlugin } from "@guolao/vue-monaco-editor";
 
 import PrimeVue from "primevue/config";
@@ -16,6 +15,8 @@ import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Editor from 'primevue/editor';
 import Dialog from 'primevue/dialog';
+import Listbox from 'primevue/listbox';
+
 const app = createApp(App);
 
 app.use(VueMonacoEditorPlugin, {
@@ -31,6 +32,7 @@ app.component("Editor", Editor);
 app.component("Slider", Slider);
 app.component("Button", Button);
 app.component("Toast", Toast);
+app.component("Listbox", Listbox);
 app.use(ToastService);
 app.use(createPinia());
 app.use(router);

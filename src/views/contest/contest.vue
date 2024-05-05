@@ -30,6 +30,7 @@
       :columns="columns"
       :pagination="pagination"
       @change="handleTableChange"
+      :loading="loading"
     >
       <template #title>
         <a-button
@@ -41,6 +42,11 @@
         >
       </template>
       <template #bodyCell="{ record, column }">
+        <template
+          v-if="column.dataIndex === 'action' && userStore.identity === 'admin'"
+        >
+          <a-button @click="handleAction(record.id)"> 查看详情 </a-button>
+        </template>
         <template v-if="column.dataIndex === 'name'">
           <router-link :to="{ path: `/contest/detail/${record.id}` }">{{
             record.name
@@ -57,7 +63,7 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { GetExamListAPI, GetAddExamAPI } from "@/services/match";
+import { GetExamListAPI, GetAddExamAPI, GetInspectAPI } from "@/services/match";
 import { useUserStore } from "@/stores/user";
 import { useToast } from "primevue/usetoast";
 
@@ -65,31 +71,12 @@ const toast = useToast();
 const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
-const dataSource = ref([
-  {
-    id: 37,
-    name: "机精确信如质",
-    student_num: 46,
-    question_num: 27,
-  },
-  {
-    id: 69,
-    name: "层民其务切然",
-    student_num: 98,
-    question_num: 15,
-  },
-  {
-    id: 30,
-    name: "己飞式什",
-    student_num: 42,
-    question_num: 53,
-  },
-]);
+const dataSource = ref([]);
 const loading = ref(true);
 const modalVisible = ref(false);
 const newCompetition = reactive({ name: "", students: [] });
-const allStudents = ref(["Alice", "Bob", "Charlie"]);
-
+const allStudents = ref([]);
+allStudents.value = userStore.students
 const pagination = reactive({
   current: 1,
   pageSize: 10,
@@ -101,16 +88,20 @@ const columns = [
   { title: "比赛名称", dataIndex: "name" },
   { title: "参与人数", dataIndex: "student_num" },
   { title: "题目数量", dataIndex: "question_num" },
+  {
+    title: "操作",
+    dataIndex: "action",
+  },
 ];
-
 async function handleGetExamList(current, pageSize) {
   const res = await GetExamListAPI(current, pageSize);
   if (res.data.code !== 200) {
     toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
   } else {
-    dataSource.value = res.data.data;
+    dataSource.value = res.data.data.exam_list;
     toast.add({ severity: "success", summary: res.data.msg, life: 3000 });
   }
+  loading.value = false;
 }
 
 function handleTableChange(pagination) {

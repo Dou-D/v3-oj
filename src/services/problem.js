@@ -56,3 +56,10 @@ export function fetchUploadQuestion({ title, content, degree, tag, io }) {
     }
   );
 }
+
+export function fetchProblemDelete(id) {
+  return request.delete(
+    "/question/del",
+    { params: { id } },
+  );
+}

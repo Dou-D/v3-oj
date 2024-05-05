@@ -1,5 +1,28 @@
 <template>
-  <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination" :loading="loading">
+  <Toast />
+  <a-space class="flex justify-end">
+    <a-input
+      placeholder="搜索题目"
+      v-model:value="searchTitle"
+      style="width: 10rem;"
+      @keyup.enter="handleSearch"
+    />
+    <a-select
+    v-model:value="selectedTag"
+      placeholder="Select a tag"
+      @change="handleSearch"
+    >
+      <a-select-option v-for="tag in tagOptions" :value="tag" :key="tag">
+        {{ tag }}
+      </a-select-option>
+    </a-select>
+  </a-space>
+  <a-table
+    :columns="columns"
+    :dataSource="dataSource"
+    :pagination="pagination"
+    :loading="loading"
+  >
     <template #bodyCell="{ record, column }">
       <template v-if="column.dataIndex === 'tag'">
         <a-tag color="#2db7f5" v-for="tag in record.tag" :key="tag">{{
@@ -38,37 +61,60 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { fetchProblemList } from '@/services/problem'
-const loading = ref(true)
-const dataSource = ref([]);
+import { fetchProblemList, fetchProblemDelete } from '@/services/problem'
+import { useToast } from 'primevue/usetoast';
 
-const pagination = {
-  page: 20, // 默认每页显示数量
-  number: 1, // 当前页数
+const loading = ref(true);
+const dataSource = ref([]);
+const searchTitle = ref("");
+const selectedTag = ref(null);
+const tagOptions = ref(['DP', '语法']); // 示例标签
+const toast = useToast()
+// Pagination settings remain unchanged
+const pagination = ref({
+  pageSize: 20, // 默认每页显示数量
+  current: 1, // 当前页数
   showSizeChanger: true, // 显示可改变每页数量
-  pageOptions: ['20', '30', '40'], // 每页数量选项
-  showTotal: total => `Total ${total}`, // 显示总数
-  onChange(page, number) {
-    changeRoute(number, page)
-  }
+  pageSizeOptions: ['10', '30', '50'], // 每页数量选项
+  showTotal: total => `Total ${total} items`, // 显示总数
+  onChange: handlePaginationChange,
+});
+
+function handlePaginationChange(page = pagination.value.current, pageSize = pagination.value.pageSize) {
+  pagination.value.current = page;
+  pagination.value.pageSize = pageSize;
+  fetchData(page, pageSize);
 }
-const changeRoute = (number, page, search_title) => {
-  pagination.number = number
-  pagination.page = page
-  ProblemListAPI(page, number, search_title)
-}
-const ProblemListAPI = async (page, number) => {
-  const res = await fetchProblemList({ page, number });
-  if (res.data.code != 200) {
-    toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
-    return;
+
+const fetchData = async (page, pageSize) => {
+  loading.value = true;
+  if(!searchTitle.value) {
+    searchTitle.value = null
   }
-  loading.value = false;
+  if(!selectedTag.value) {
+    selectedTag.value = null
+  }
+  const params = {
+    page: page,
+    number: pageSize,
+    search_title: searchTitle.value,
+    search_tag: selectedTag.value,
+  };
+  const res = await fetchProblemList(params);
+  if (res.data.code !== 200) {
+    toast.add({ severity: 'error', summary: res.data.msg, life: 3000 })
+    return
+  } 
   dataSource.value = res.data.data.question_list;
+  loading.value = false;
 };
+
+const handleSearch = () => {
+  handlePaginationChange(pagination.value.current, pagination.value.pageSize);
+};
+
 onMounted(() => {
-  changeRoute(pagination.page, pagination.number)
-  ProblemListAPI();
+  handlePaginationChange(pagination.value.current, pagination.value.pageSize);
 });
 const columns = [
   {
@@ -110,8 +156,14 @@ function editRecord(id) {
   window.location.href = `/console/addproblem?id=${id}`;
 }
 
-function deleteRecord(id) {
-  console.log("Deleting record with id:", id);
-  // 实现删除逻辑
+async function deleteRecord(id) {
+  const res = await fetchProblemDelete(id)
+  if(res.data.code !== 200) {
+    console.log(111);
+    toast.add({ severity: 'error', summary: 1111, life: 3000 })
+    return
+  }
+  toast.add({ severity:'success', summary: res.data.msg, life: 3000 })
+  handlePaginationChange()
 }
 </script>

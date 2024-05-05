@@ -1,6 +1,6 @@
 <template>
   <Toast />
-  <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination" :size="small">
+  <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination" :size="small" :loading="loading">
     <template #bodyCell="{ record, column }">
       <template v-if="column.dataIndex === 'title'">
         <!-- Uses router-link to navigate to the question detail page -->
@@ -62,17 +62,19 @@ const pagination = ref({
 });
 
 // Fetch problems when component is mounted
-onMounted(async () => {
-  console.log(route.params);
+onMounted(() => {
+  const id = route.params.id
+  fetchProblemListAPI(id)
 });
 
 // Fetch list of problems
 async function fetchProblemListAPI(id) {
-  const res = await GetExamQuestionAPI();
+  const res = await GetExamQuestionAPI(id);
   if (res.data.code != 200) {
     toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
     return;
   }
   dataSource.value = res.data.data.question_list;
+  loading.value = false
 }
 </script>

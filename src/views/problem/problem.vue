@@ -20,7 +20,7 @@
             />
           </a-col>
           <a-col :span="8">
-            <Button label="提交" severity="success" @click="uploadAnswer" />
+            <a-button type="primary" ghost @click="uploadAnswer">提交</a-button>
           </a-col>
           <a-col :span="8">
             <Cascader
@@ -62,18 +62,18 @@ const optionsLanguage = ref([
     value: "C",
     label: "C",
   },
-  {
-    value: "cpp",
-    label: "C++",
-  },
-  {
-    value: "java",
-    label: "Java",
-  },
-  {
-    value: "javascript",
-    label: "JavaScript",
-  },
+  // {
+  //   value: "cpp",
+  //   label: "C++",
+  // },
+  // {
+  //   value: "java",
+  //   label: "Java",
+  // },
+  // {
+  //   value: "javascript",
+  //   label: "JavaScript",
+  // },
 ]);
 const language = ref([
   {

@@ -3,10 +3,6 @@
         <a-col flex="1 1 200px">
             <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
         </a-col>
-        <a-flex align="center">
-            <a-input-search v-model:value="value" placeholder="input search text" size="large" enter-button="Search"
-                @search="onSearch" />
-        </a-flex>
         <a-col flex="0 1 300px">
             <a-dropdown-button @click="handleButtonClick">
                 dou

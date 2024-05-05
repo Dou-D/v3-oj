@@ -11,7 +11,7 @@ export function GetAddExamAPI(students, name) {
     "/exam/add_exam",
     {
       student: students,
-      name: name,
+      name,
     },
     {
       headers: { "Content-Type": "application/json" },
@@ -48,7 +48,6 @@ export function GetExamListAPI(page, number) {
     }
   );
 }
-
 
 export function GetExamQuestionAPI(id) {
   return request.get(
