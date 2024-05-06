@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 import { getUserInfoAPI } from "@/services/user";
+import { useRouter } from "vue-router";
+import storage from "@/services/storage";
 export const useUserStore = defineStore("user", () => {
 
   const menu = ref([]);
@@ -13,6 +15,7 @@ export const useUserStore = defineStore("user", () => {
     Accept: ""
   })
   const students = ref([])
+  const router = useRouter()
   const updateUserInfo = async () => {
     const res = await getUserInfoAPI();
     menu.value = res.data.data.menu || []
@@ -25,6 +28,10 @@ export const useUserStore = defineStore("user", () => {
   };
 
   function addAdminRoutes(router) {
+    if(!storage.get(storage.USER_TOKEN)){
+      router.replace("/login")
+      return
+    }
     if (!adminRoutesAdded.value) {
       router.addRoute("index", {
         path: "/console",

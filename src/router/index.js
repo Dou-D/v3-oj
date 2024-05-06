@@ -64,7 +64,7 @@ const routes = [
               roles: ["admin", "stu"],
             },
             component: () => import("@/views/contest/detail.vue"),
-          }
+          },
         ],
       },
     ],
@@ -94,20 +94,25 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
   const token = storage.get(storage.USER_TOKEN);
-
-  // 用户身份
-  if (token && !userStore.identity || userStore.menu.length === 0) {
+  // if(token) {
+  //   userStore.updateUserInfo();
+  // }
+  if (token && !userStore.identity && userStore.menu.length === 0) {
     await userStore.updateUserInfo();
-  }
-  // 权限路由
-  if (token && !userStore.identity || !userStore.adminRoutesAdded) {
-    userStore.addAdminRoutes(router); // 传递 router 实例
-    return next(to.fullPath);
   }
   if (to.meta.auth) {
     if (token) {
-      if (to.path === "/user/login") {
+      if (to.path === "/login") {
         return next("/");
+      }
+      // 用户身份
+      if (!userStore.identity || userStore.menu.length === 0) {
+        await userStore.updateUserInfo();
+      }
+      // 权限路由
+      if (!userStore.identity || !userStore.adminRoutesAdded) {
+        userStore.addAdminRoutes(router); // 传递 router 实例
+        return next(to.fullPath);
       }
       if (to.meta.roles.includes(userStore.identity)) {
         return next();
@@ -115,7 +120,7 @@ router.beforeEach(async (to, from, next) => {
         return next("/404");
       }
     } else {
-      return next("/user/login");
+      return next("/login");
     }
   } else {
     // if (!to.redirectedFrom) {

@@ -1,8 +1,10 @@
 <template>
   <Toast />
   <a-space class="flex justify-end">
-    <a-button type="primary" @click="showDetailModal">查看详情</a-button>
-    <a-button @click="showAddQuestionModal">添加题目</a-button>
+    <div v-if="userStore.identity ==='admin'">
+      <a-button type="primary" @click="showDetailModal">查看详情</a-button>
+      <a-button @click="showAddQuestionModal">添加题目</a-button>
+    </div>
 
     <!-- Detail Modal -->
     <a-modal
@@ -23,7 +25,7 @@
             {{ record.username }}
           </template>
           <template v-else-if="column.dataIndex === 'status'">
-            <a-tag :color="record.status === '完成' ? 'green' : 'red'">{{
+            <a-tag :color="record.status === 'pass' ? 'green' : 'red'">{{
               record.status
             }}</a-tag>
           </template>
@@ -78,28 +80,28 @@ import {
   GetInspectAPI,
   GetAddQuestionAPI,
 } from "@/services/match";
-import { fetchProblemList } from '@/services/problem'
+import { fetchProblemList } from "@/services/problem";
 import { useToast } from "primevue/usetoast";
 import { useRouter, useRoute } from "vue-router";
-
+import { useUserStore } from '@/stores/user'
 // 初始化通知（toast）服务和路由
 const toast = useToast();
 const router = useRouter();
 const route = useRoute();
-
+const userStore = useUserStore();
 // 初始化组件的响应式数据
 const dataSource = ref([]);
 const loading = ref(true);
 const newQuestion = ref({ options: [] });
 const selectOptions = ref([]);
-fetchProblemList({page: 0, number: 0})
-  .then(res => {
-    selectOptions.value = res.data.data.question_list.map(item => ({
+fetchProblemList({ page: 0, number: 0 })
+  .then((res) => {
+    selectOptions.value = res.data.data.question_list.map((item) => ({
       label: item.title,
       value: item.id,
     }));
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
     toast.add({ severity: "error", summary: err.data.msg, life: 3000 });
   });
@@ -139,7 +141,6 @@ async function fetchProblemListAPI(id) {
 const openDetailModal = ref(false);
 const openAddQuestionModal = ref(false);
 
-
 // 显示添加题目模态框的函数
 const showAddQuestionModal = () => {
   openAddQuestionModal.value = true;
@@ -167,21 +168,21 @@ const handleDetailOk = () => {
 const studentColumns = [
   { title: "ID", dataIndex: "id", key: "id" },
   { title: "用户名", dataIndex: "username", key: "username" },
-  { title: "状态", dataIndex: "status", key: "status" }
+  { title: "状态", dataIndex: "status", key: "status" },
 ];
 const detailData = ref([]);
 // 显示详情模态框的函数
 const showDetailModal = () => {
   openDetailModal.value = true;
-  handleInspect()
+  handleInspect();
 };
 const handleInspect = async () => {
-  const id = parseInt(route.params.id)
-  const res = await GetInspectAPI(id)
-  if(res.data.code != 200) {
+  const id = parseInt(route.params.id);
+  const res = await GetInspectAPI(id);
+  if (res.data.code != 200) {
     toast.add({ severity: "error", summary: res.data.msg, life: 3000 });
     return;
   }
-  detailData.value = res.data.data.student
-}
+  detailData.value = res.data.data.student;
+};
 </script>

@@ -38,13 +38,6 @@ const items = ref([
         onClick: () => navigate('/problems'),
     },
     {
-        key: 'record',
-        icon: () => h(ReconciliationTwoTone),
-        label: '提交记录',
-        // 添加 onClick 属性进行导航
-        onClick: () => navigate('/record'),
-    },
-    {
         key: 'contest',
         icon: () => h(ExperimentTwoTone),
         label: '比赛',

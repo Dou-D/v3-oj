@@ -1,6 +1,6 @@
 <template>
   <a-row>
-    <a-col :span="10" :offset="6">
+    <a-col :span="12" :offset="6">
       <a-descriptions bordered title="个人主页" size="large">
         <a-descriptions-item label="用户名">{{
           userStore.userInfo.username

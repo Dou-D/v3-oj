@@ -61,17 +61,20 @@ const handleButtonClick = (e) => {
   }
   navigate("/login");
 };
-const handleMenuClick = (e) => {
-  if (e.key == "/logout") {
-    logout();
-    return;
-  }
-  router.push(e.key);
-};
+
 // 退出登录
 const logout = () => {
   router.replace("/login");
   userStore.deleteInfo();
   storage.remove(storage.USER_TOKEN);
 };
+const handleMenuClick = (e) => {
+  if (e.key == "/logout") {
+    logout();
+    console.log(111)
+    return;
+  }
+  router.push(e.key);
+};
+
 </script>
