@@ -96,11 +96,11 @@ router.beforeEach(async (to, from, next) => {
   const token = storage.get(storage.USER_TOKEN);
 
   // 用户身份
-  if (token && !userStore.identity && userStore.menu.length === 0) {
+  if (token && !userStore.identity || userStore.menu.length === 0) {
     await userStore.updateUserInfo();
   }
   // 权限路由
-  if (token && !userStore.identity && !userStore.adminRoutesAdded) {
+  if (token && !userStore.identity || !userStore.adminRoutesAdded) {
     userStore.addAdminRoutes(router); // 传递 router 实例
     return next(to.fullPath);
   }
