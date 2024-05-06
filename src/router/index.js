@@ -25,7 +25,7 @@ const routes = [
             name: "user",
             meta: {
               auth: true,
-              roles: ["admin", "guest"],
+              roles: ["admin", "stu"],
             },
             component: () => import("@/views/user/index.vue"),
           },
@@ -34,7 +34,7 @@ const routes = [
             name: "problems",
             meta: {
               auth: true,
-              roles: ["admin", "guest"],
+              roles: ["admin", "stu"],
             },
             component: () => import("@/views/problem/index.vue"),
           },
@@ -43,7 +43,7 @@ const routes = [
             name: "problem",
             meta: {
               auth: true,
-              roles: ["admin", "guest"],
+              roles: ["admin", "stu"],
             },
             component: () => import("@/views/problem/problem.vue"),
           },
@@ -52,7 +52,7 @@ const routes = [
             name: "contest",
             meta: {
               auth: true,
-              roles: ["admin", "guest"],
+              roles: ["admin", "stu"],
             },
             component: () => import("@/views/contest/contest.vue"),
           },
@@ -61,7 +61,7 @@ const routes = [
             name: "contestDetail",
             meta: {
               auth: true,
-              roles: ["admin", "guest"],
+              roles: ["admin", "stu"],
             },
             component: () => import("@/views/contest/detail.vue"),
           }
@@ -96,7 +96,7 @@ router.beforeEach(async (to, from, next) => {
   const token = storage.get(storage.USER_TOKEN);
 
   // 用户身份
-  if (token && !userStore.identity || userStore.menu.length === 0) {
+  if (token && !userStore.identity && userStore.menu.length === 0) {
     await userStore.updateUserInfo();
   }
   // 权限路由
