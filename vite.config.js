@@ -24,6 +24,9 @@ export default defineConfig({
     }
   },
   build: setupBuild(),
+  esbuild: {
+    drop: ["console", "debugger"],
+  },
   server: {
     proxy: {
       '/api': {

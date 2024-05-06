@@ -61,7 +61,7 @@
       </template>
       <template v-else-if="column.dataIndex === 'passing_rate'">
         <a-progress
-          :percent="record.passing_rate"
+          :percent="Number(record.passing_rate)"
           size="large"
           status="active"
         />

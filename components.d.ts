@@ -8,16 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Cascader: typeof import('./src/components/Problem/Cascader.vue')['default']
-    ElButton: typeof import('element-plus/es')['ElButton']
-    ElInput: typeof import('element-plus/es')['ElInput']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElProgress: typeof import('element-plus/es')['ElProgress']
-    ElRate: typeof import('element-plus/es')['ElRate']
     ElSelect: typeof import('element-plus/es')['ElSelect']
-    ElTable: typeof import('element-plus/es')['ElTable']
-    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
-    ElTag: typeof import('element-plus/es')['ElTag']
     MonacoEditor: typeof import('./src/components/Problem/MonacoEditor.vue')['default']
     NavBar: typeof import('./src/components/Home/NavBar.vue')['default']
     ProblemTable: typeof import('./src/components/Problem/ProblemTable.vue')['default']
