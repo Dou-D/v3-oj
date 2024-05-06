@@ -21,6 +21,15 @@ const routes = [
             component: () => import("@/views/home/our.vue"),
           },
           {
+            path: "/user",
+            name: "user",
+            meta: {
+              auth: true,
+              roles: ["admin", "guest"],
+            },
+            component: () => import("@/views/user/index.vue"),
+          },
+          {
             path: "/problems",
             name: "problems",
             meta: {
@@ -61,31 +70,20 @@ const routes = [
     ],
   },
   {
-    path: "/user",
-    name: "user",
+    path: "/login",
+    name: "login",
     meta: {
-      auth: true,
-      roles: ["admin", "guest"],
+      auth: false,
     },
-    component: () => import("@/views/user/index.vue"),
-    children: [
-      {
-        path: "/user/login",
-        name: "login",
-        meta: {
-          auth: false,
-        },
-        component: () => import("@/views/user/login.vue"),
-      },
-      {
-        path: "/user/register",
-        name: "register",
-        meta: {
-          auth: false,
-        },
-        component: () => import("@/views/user/register.vue"),
-      },
-    ],
+    component: () => import("@/views/user/login.vue"),
+  },
+  {
+    path: "/register",
+    name: "register",
+    meta: {
+      auth: false,
+    },
+    component: () => import("@/views/user/register.vue"),
   },
 ];
 const router = createRouter({
@@ -98,7 +96,7 @@ router.beforeEach(async (to, from, next) => {
   const token = storage.get(storage.USER_TOKEN);
 
   // 用户身份
-  if (token && !userStore.identity && userStore.menu.length === 0) {
+  if (token && !userStore.identity || userStore.menu.length === 0) {
     await userStore.updateUserInfo();
   }
   // 权限路由

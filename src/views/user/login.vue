@@ -45,6 +45,7 @@
         <a-form-item>
           <a-button
             @click="handleLogin"
+            @keydown.enter="handleLogin"
             :disabled="disabled"
             type="primary"
             html-type="submit"
@@ -69,10 +70,16 @@ import { reactive, computed, ref } from "vue";
 import { getLoginAPI } from "@/services/user.js";
 // primevue toast
 import { useToast } from "primevue/usetoast";
+import { useUserStore } from '@/stores/user'
 
 import storage from "@/services/storage";
-const toast = useToast();
+const router = useRouter();
 
+const userStore = useUserStore();
+const toast = useToast();
+if (userStore.identity) {
+  router.replace("/")
+}
 const formState = reactive({
   username: "",
   password: "",
@@ -83,7 +90,6 @@ const disabled = computed(() => {
 });
 
 // 开始登录
-const router = useRouter();
 const handleLogin = async () => {
   const res = await getLoginAPI({
     username: formState.username,

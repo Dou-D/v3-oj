@@ -6,7 +6,7 @@ export const useUserStore = defineStore("user", () => {
   const menu = ref([]);
   const identity = ref("");
   const adminRoutesAdded = ref(false);
-  const userInfo = reactive({
+  let userInfo = reactive({
     username: "",
     startTime: '',
     submit: '',
@@ -15,7 +15,7 @@ export const useUserStore = defineStore("user", () => {
   const students = ref([])
   const updateUserInfo = async () => {
     const res = await getUserInfoAPI();
-    menu.value = res.data.data.menu
+    menu.value = res.data.data.menu || []
     identity.value = res.data.data.identity;
     userInfo.username = res.data.data.info.username
     userInfo.startTime = res.data.data.info.startTime
@@ -54,6 +54,18 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  const deleteInfo = () => {
+    menu.value = []
+    identity.value = ''
+    addAdminRoutes.value = false
+    userInfo = reactive({
+      username: "",
+      startTime: '',
+      submit: '',
+      Accept: ""
+    })
+    students.value = []
+  }
   return {
     menu,
     identity,
@@ -62,5 +74,6 @@ export const useUserStore = defineStore("user", () => {
     adminRoutesAdded,
     updateUserInfo,
     addAdminRoutes,
+    deleteInfo
   };
 });

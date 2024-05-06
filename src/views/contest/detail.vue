@@ -78,6 +78,7 @@ import {
   GetInspectAPI,
   GetAddQuestionAPI,
 } from "@/services/match";
+import { fetchProblemList } from '@/services/problem'
 import { useToast } from "primevue/usetoast";
 import { useRouter, useRoute } from "vue-router";
 
@@ -90,21 +91,18 @@ const route = useRoute();
 const dataSource = ref([]);
 const loading = ref(true);
 const newQuestion = ref({ options: [] });
-const selectOptions = ref([
-  {
-    label: 6,
-    value: 6,
-  },
-  {
-    label: 8,
-    value: 8,
-  },
-  {
-    label: 9,
-    value: 9,
-  },
-]);
-
+const selectOptions = ref([]);
+fetchProblemList({page: 0, number: 0})
+  .then(res => {
+    selectOptions.value = res.data.data.question_list.map(item => ({
+      label: item.title,
+      value: item.id,
+    }));
+  })
+  .catch(err => {
+    console.log(err);
+    toast.add({ severity: "error", summary: err.data.msg, life: 3000 });
+  });
 // 定义表格的列配置
 const columns = [
   { title: "题号", dataIndex: "id", width: "120" },

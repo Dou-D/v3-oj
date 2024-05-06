@@ -42,11 +42,6 @@
         >
       </template>
       <template #bodyCell="{ record, column }">
-        <template
-          v-if="column.dataIndex === 'action' && userStore.identity === 'admin'"
-        >
-          <a-button @click="handleAction(record.id)"> 查看详情 </a-button>
-        </template>
         <template v-if="column.dataIndex === 'name'">
           <router-link :to="{ path: `/contest/detail/${record.id}` }">{{
             record.name
@@ -88,10 +83,6 @@ const columns = [
   { title: "比赛名称", dataIndex: "name" },
   { title: "参与人数", dataIndex: "student_num" },
   { title: "题目数量", dataIndex: "question_num" },
-  {
-    title: "操作",
-    dataIndex: "action",
-  },
 ];
 async function handleGetExamList(current, pageSize) {
   const res = await GetExamListAPI(current, pageSize);
