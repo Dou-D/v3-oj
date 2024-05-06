@@ -5,7 +5,7 @@
         </a-col>
         <a-col flex="0 1 300px">
             <a-dropdown-button @click="handleButtonClick">
-                dou
+                {{ userStore.userInfo.username }}
                 <template #overlay>
                     <a-menu @click="handleMenuClick">
                         <a-menu-item v-for="item in menu" :key="item.path">
