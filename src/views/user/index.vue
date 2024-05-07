@@ -11,13 +11,13 @@
         <a-descriptions-item label="提交题目">{{
           userStore.userInfo.submit
         }}</a-descriptions-item>
-        <a-descriptions-item label="AC">{{
+        <!-- <a-descriptions-item label="AC">{{
           userStore.userInfo.Accept
-        }}</a-descriptions-item>
+        }}</a-descriptions-item> -->
         <a-descriptions-item label="用户身份">{{
-          userStore.identity
+          userStore.identity === "stu" ? "学生" : "管理员"
         }}</a-descriptions-item>
-        <a-descriptions-item label="管理学生">
+        <a-descriptions-item label="管理学生" v-if="userStore.identity === 'admin'">
           <a-dropdown>
             <a class="ant-dropdown-link" @click.prevent>
               Hover me
@@ -34,22 +34,13 @@
         </a-descriptions-item>
       </a-descriptions>
     </a-col>
-    
   </a-row>
-  <a-card title="Card title" :bordered="false">
-            <a-card-grid style="width: 25%; text-align: center"
-              >Content</a-card-grid
-            >
-            <a-card-grid style="width: 25%; text-align: center"
-              >Content</a-card-grid
-            >
-            <a-card-grid style="width: 25%; text-align: center"
-              >Content</a-card-grid
-            >
-            <a-card-grid style="width: 25%; text-align: center"
-              >Content</a-card-grid
-            >
-          </a-card>
+  <!-- <a-card title="Card title" :bordered="false">
+    <a-card-grid style="width: 25%; text-align: center">Content</a-card-grid>
+    <a-card-grid style="width: 25%; text-align: center">Content</a-card-grid>
+    <a-card-grid style="width: 25%; text-align: center">Content</a-card-grid>
+    <a-card-grid style="width: 25%; text-align: center">Content</a-card-grid>
+  </a-card> -->
 </template>
 
 <script setup>

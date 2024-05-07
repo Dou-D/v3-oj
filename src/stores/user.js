@@ -19,6 +19,8 @@ export const useUserStore = defineStore("user", () => {
   const updateUserInfo = async () => {
     const res = await getUserInfoAPI();
     menu.value = res.data.data.menu || []
+    menu.value = menu.value.filter(item => item.id != 4);
+    console.log();
     identity.value = res.data.data.identity;
     userInfo.username = res.data.data.info.username
     userInfo.startTime = res.data.data.info.startTime
@@ -27,11 +29,11 @@ export const useUserStore = defineStore("user", () => {
     students.value = res.data.data.students
   };
 
-  function addAdminRoutes(router) {
-    if(!storage.get(storage.USER_TOKEN)){
-      router.replace("/login")
-      return
-    }
+  function addAdminRoutes() {
+    // if(!storage.get(storage.USER_TOKEN)){
+    //   router.replace("/login")
+    //   return
+    // }
     if (!adminRoutesAdded.value) {
       router.addRoute("index", {
         path: "/console",

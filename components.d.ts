@@ -9,8 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     Cascader: typeof import('./src/components/Problem/Cascader.vue')['default']
     ElOption: typeof import('element-plus/es')['ElOption']
-    ElPagination: typeof import('element-plus/es')['ElPagination']
-    ElProgress: typeof import('element-plus/es')['ElProgress']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     MonacoEditor: typeof import('./src/components/Problem/MonacoEditor.vue')['default']
     NavBar: typeof import('./src/components/Home/NavBar.vue')['default']

@@ -54,7 +54,7 @@
             Log in
           </a-button>
           Or
-          <RouterLink to="/user/register">
+          <RouterLink to="/register">
             <a-button type="primary">注册</a-button>
           </RouterLink>
         </a-form-item>

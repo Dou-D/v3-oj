@@ -85,9 +85,10 @@ const fetchData = async (current, pageSize) => {
       return;
     }
     dataSource.value = res.data.data.question_list;
-    pagination.total = res.data.data.total * pageSize - 1;
+    pagination.total = res.data.data.total * current;
     pagination.current = current;
     pagination.pageSize = pageSize;
+    toast.add({ severity: 'success', summary: res.data.msg, life: 3000 });
   } catch (error) {
     toast.add({ severity: 'error', summary: error.message, life: 3000 });
   } finally {

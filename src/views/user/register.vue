@@ -52,7 +52,7 @@
                         开始注册
                     </a-button>
                     Or
-                    <RouterLink to="/user/login">
+                    <RouterLink to="/login">
                         <a-button type="default">登录</a-button>
                     </RouterLink>
                 </a-form-item>

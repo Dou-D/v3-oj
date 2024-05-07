@@ -85,6 +85,7 @@ const routes = [
     },
     component: () => import("@/views/user/register.vue"),
   },
+
 ];
 const router = createRouter({
   history: createWebHistory(),
@@ -97,22 +98,18 @@ router.beforeEach(async (to, from, next) => {
   // if(token) {
   //   userStore.updateUserInfo();
   // }
-  if (token && !userStore.identity && userStore.menu.length === 0) {
+  if (token && !userStore.identity) {
     await userStore.updateUserInfo();
+  }
+  // 权限路由
+  if (!userStore.adminRoutesAdded) {
+    userStore.addAdminRoutes(router); // 传递 router 实例
+    return next(to.fullPath);
   }
   if (to.meta.auth) {
     if (token) {
       if (to.path === "/login") {
         return next("/");
-      }
-      // 用户身份
-      if (!userStore.identity || userStore.menu.length === 0) {
-        await userStore.updateUserInfo();
-      }
-      // 权限路由
-      if (!userStore.identity || !userStore.adminRoutesAdded) {
-        userStore.addAdminRoutes(router); // 传递 router 实例
-        return next(to.fullPath);
       }
       if (to.meta.roles.includes(userStore.identity)) {
         return next();

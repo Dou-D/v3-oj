@@ -28,7 +28,6 @@
     <a-table
       :dataSource="dataSource"
       :columns="columns"
-      :pagination="pagination"
       @change="handleTableChange"
       :loading="loading"
     >

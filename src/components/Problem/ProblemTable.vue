@@ -138,7 +138,8 @@ const ProblemListAPI = async (currentPage, pageSize, search_title, search_tag) =
       return;
     }
     dataSource.value = res.data.data.question_list;
-    pagination.total = res.data.data.total * pageSize;
+    pagination.total = res.data.data.total * currentPage;
+    toast.add({ severity: "success", summary: res.data.msg, life: 3000 });
   } catch (error) {
     toast.add({ severity: "error", summary: error.message, life: 3000 });
   } finally {

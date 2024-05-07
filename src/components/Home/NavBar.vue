@@ -25,7 +25,6 @@ import { RouterLink, useRouter } from "vue-router";
 import { ref } from "vue";
 import storage from "@/services/storage";
 import { useUserStore } from "@/stores/user";
-import EventBus from "@/utils/eventBus";
 const current = ref(["1"]);
 const router = useRouter();
 import { useToast } from "primevue/usetoast";
